@@ -1,4 +1,4 @@
-const Profile = require('../models/Store');
+const Store = require('../models/Store');
 
 let stores = [] // Base temporal.
 
@@ -14,8 +14,8 @@ exports.getByName = (req, res) => {
 
 exports.create = (req, res) => {
   const { name, category, logo, qualification, city } = req.body;
-  const newStore = new Profile(name, category, logo, qualification, city);
-  profiles.push(newStore);
+  const newStore = new Store(name, category, logo, qualification, city);
+  stores.push(newStore);
   res.status(201).json(newStore);
 };
 

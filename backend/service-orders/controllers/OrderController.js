@@ -1,4 +1,4 @@
-const Profile = require('../models/Order');
+const Order = require('../models/Order');
 
 let orders = [] // Base temporal.
 
@@ -14,7 +14,7 @@ exports.getById = (req, res) => {
 
 exports.create = (req, res) => {
   const { id, listProducts, idAccount } = req.body;
-  const newOrder = new Profile(id, listProducts, idAccount);
+  const newOrder = new Order(id, listProducts, idAccount);
   orders.push(newOrder);
   res.status(201).json(newOrder);
 };
