@@ -1,13 +1,15 @@
-class Store {
+const mongoose = require('mongoose');
 
-    constructor(name, category, logo, qualification, city){
-        this.name = name;
-        this.category = category;
-        this.logo = logo;
-        this.qualification = qualification;
-        this.city = city;
-    }
+const QUALI = ['Comida Rapida', 'Cafeteria', 'Food Truck', 'Bar', 'Restaurant']
 
-}
+const storeSchema = new mongoose.Schema({
+  id: { type: String, required: true},
+  name: { type: String, required: true },
+  category: {type: String, required: true} ,
+  qualification: {
+    type: String,
+    enum: QUALI,
+    required: true},
+});
 
-module.exports = Store;
+module.exports = mongoose.model('Store', storeSchema);

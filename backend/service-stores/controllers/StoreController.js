@@ -1,39 +1,68 @@
 const Store = require('../models/Store');
+const ImagesRedis = require('../services/ImagesRedis');
 
-let stores = [] // Base temporal.
-
-exports.getAll = (req, res) => {
-    res.json(stores);
+exports.getAll = async (req, res) => {
+    try {
+      const stores = await Store.find();
+      res.json(stores);
+    } catch(e) {
+      res.status(500).json({error: 'Error al obtener tiendas', detalle: e.message });
+    }
 };
 
-exports.getByName = (req, res) => {
-  const store = stores.find(l => l.name === req.params.name);
-  if (!store) return res.status(404).json({ error: 'Tienda no encontrada' });
-  res.json(store);
+exports.getById = (req, res) => {
+  try {
+    const store = Store.find(l => l.id === req.params.id);
+    if (!store) return res.status(404).json({ error: 'Tienda no encontrada' });
+    res.json(store);
+  } catch(e){
+    res.status(500).json({error: 'Error al obtener tienda', detalle: e.message });
+  }
 };
 
-exports.create = (req, res) => {
-  const { name, category, logo, qualification, city } = req.body;
-  const newStore = new Store(name, category, logo, qualification, city);
-  stores.push(newStore);
-  res.status(201).json(newStore);
+exports.getLogo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const store = Store.find(l => l.id === id );
+    const logo = await ImagesRedis.getImage(store.id);
+    if (!logo) return res.status(404).send('Logo no encontrado');
+    res.send(logo); // `res.sendFile` para imágenes físicas.
+  } catch(e) {
+    res.status(500).json({error: 'Error al obtener logo', detalle: e.message });
+  }
 };
 
-exports.update = (req, res) => {
-  const { name } = req.params;
-  const store = stores.find(l => l.name === name);
-  if (!store) return res.status(404).json({ error: 'Tienda no encontrada' });
-
-  const { category, logo, qualification, city } = req.body;
-  store.category = category;
-  store.logo = logo;
-  store.qualification = qualification;
-  store.city = city;
-  res.json(store);
+exports.create = async (req, res) => {
+  try {
+    const newStore = await Store.create(req.body);
+    await ImagesRedis.saveImage(newStore._id.toString(), logo);
+    res.status(201).json(newStore);
+  } catch(e) {
+    res.status(400).json({error: 'Datos inválidos', detalle: e.message });
+  }
 };
 
-exports.remove = (req, res) => {
-  const { name } = req.params;
-  stores = stores.filter(l => l.name !== name);
-  res.status(204).end();
+exports.update = async (req, res) => {
+  try {
+    const newStore = await Store.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if(!newStore)
+      return res.status(404).json({error: 'Tienda no encontrado', detalle: e.message } );
+  } catch(e) {
+    res.status(400).json({ error: 'Error al actualizar', detalle: e.message });
+  }
+};
+
+exports.remove = async (req, res) => {
+  try {
+    const removedStore = await Store.findByIdAndDelete(req.params.id);
+    if(!removedStore)
+      return res.status(404).json({error: 'Tienda no encontrado', detalle: e.message } );
+    res.status(204).end();
+  } catch(e) {
+    res.status(500).json({ error: 'Error al eliminar la tienda' });
+  }
 };
