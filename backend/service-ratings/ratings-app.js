@@ -4,7 +4,7 @@ const profileRoutes = require('./routes/RatingRoutes');
 
 app.use(express.json()); // Para leer JSON del body
 
-app.use('/stores', profileRoutes);
+app.use('/ratings', profileRoutes);
 
 const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {

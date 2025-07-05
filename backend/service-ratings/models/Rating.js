@@ -1,12 +1,10 @@
-class Rating {
+const mongoose = require('mongoose');
 
-    constructor(idStore, idOrder, numStars, comment){
-        this.idStore = idStore;
-        this.idOrder = idOrder;
-        this.numStars = numStars;
-        this.comment = comment;
-    }
+const ratingSchema = new mongoose.Schema({
+  idStore: { type: String, required: true},
+  idOrder: { type: String, required: true },
+  numStars: { type: mongoose.SchemaTypes.Double , required: true} ,
+  comment: { type: String, required: true}
+});
 
-}
-
-module.exports = Rating;
+module.exports = mongoose.model('Rating', ratingSchema);

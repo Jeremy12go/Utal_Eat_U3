@@ -13,7 +13,8 @@ exports.getAll = async (req, res) => {
 exports.getById = (req, res) => {
   try {
     const store = Store.find(l => l.id === req.params.id);
-    if (!store) return res.status(404).json({ error: 'Tienda no encontrada' });
+    if (!store) 
+      return res.status(404).json({ error: 'Tienda no encontrada' });
     res.json(store);
   } catch(e){
     res.status(500).json({error: 'Error al obtener tienda', detalle: e.message });
@@ -44,12 +45,12 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const newStore = await Store.findByIdAndUpdate(
+    const store = await Store.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true, runValidators: true }
     );
-    if(!newStore)
+    if(!store)
       return res.status(404).json({error: 'Tienda no encontrado', detalle: e.message } );
   } catch(e) {
     res.status(400).json({ error: 'Error al actualizar', detalle: e.message });
@@ -63,6 +64,6 @@ exports.remove = async (req, res) => {
       return res.status(404).json({error: 'Tienda no encontrado', detalle: e.message } );
     res.status(204).end();
   } catch(e) {
-    res.status(500).json({ error: 'Error al eliminar la tienda' });
+    res.status(500).json({ error: 'Error al eliminar la tienda', detalle: e.message });
   }
 };

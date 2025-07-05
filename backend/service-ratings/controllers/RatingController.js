@@ -1,38 +1,58 @@
 const Rating = require('../models/Rating');
 
-let ratings = [] // Base temporal.
-
-exports.getAll = (req, res) => {
+exports.getAll = async (req, res) => {
+  try {
+    const ratings = await Rating.find();
     res.json(ratings);
+  } catch(e) {
+    res.status(500).json({error: 'Error al obtener Ratings', detalle: e.message });
+  }
 };
 
-exports.getByIdOrder = (req, res) => {
-  const rating = ratings.find(l => l.idOrder === req.params.idOrder);
-  if (!rating) return res.status(404).json({ error: 'Rating no encontrado' });
-  res.json(rating);
+exports.getByIdOrder = async (req, res) => {
+  try {
+    const rating = await Rating.findOne({ idOrder: req.params.idOrder });
+    if (!rating)
+      return res.status(404).json({ error: `Rating de orden ${req.params.idOrder} no encontrado` });
+    res.json(rating);
+  } catch(e) {
+    res.status(500).json({error: 'Error al obtener Ratings', detalle: e.message });
+  }
 };
 
-exports.create = (req, res) => {
-  const { idStore, idOrder, numStars, comment } = req.body;
-  const newRating = new Rating(idStore, idOrder, numStars, comment);
-  ratings.push(newRating);
-  res.status(201).json(newRating);
+exports.create = async (req, res) => {
+  try {
+    const newRating = await Rating.create(req.body);
+    res.status(201).json(newRating);
+  } catch(e) {
+    res.status(400).json({error: 'Datos inválidos', detalle: e.message });
+  }
 };
 
-exports.update = (req, res) => {
-  const { idOrder } = req.params;
-  const rating = ratings.find(l => l.idOrder === idOrder);
-  if (!rating) return res.status(404).json({ error: 'Rating no encontrado' });
-
-  const { idStore, numStars, comment} = req.body;
-  rating.idStore = idStore;
-  rating.numStars = numStars;
-  rating.comment = comment;
-  res.json(rating);
+exports.update = async (req, res) => {
+  try {
+    const updatedRating = await Rating.findOneAndUpdate(
+      { idOrder: req.params.idOrder },
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!updatedRating) {
+      return res.status(404).json({ error: `Rating de orden ${req.params.idOrder} no encontrado` });
+    }
+    res.json(updatedRating);
+  } catch (e) {
+    res.status(400).json({ error: 'Error al actualizar rating', detalle: e.message });
+  }
 };
 
-exports.remove = (req, res) => {
-  const { idOrder } = req.params;
-  ratings = ratings.filter(l => l.idOrder !== idOrder);
-  res.status(204).end();
+exports.remove = async (req, res) => {
+    try {
+    const deletedRating = await Rating.findOneAndDelete({ idOrder: req.params.idOrder });
+    if (!deletedRating) {
+      return res.status(404).json({ error: `Rating de orden ${req.params.idOrder} no encontrado` });
+    }
+    res.status(204).end();
+  } catch (e) {
+    res.status(500).json({ error: 'Error al eliminar rating', detalle: e.message });
+  }
 };

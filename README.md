@@ -1,6 +1,7 @@
 # Utalca Eat
 
-
+Es una aplicación que consiste en la solicitud de comida a domicilio,
+...
 ---
 
 ## Tecnologías
@@ -29,8 +30,8 @@ Antes de ejecutar la aplicación, se debe tener instalado:
 ### 1. Clona el proyecto
 
 ```bash
-    git clone https://github.com/tuusuario/SmartHome360.git
-    cd SmartHome360
+    git clone https://github.com/tuUsuario/Utal_Eat_U3.git
+    cd Utal_Eat_U3
 ```
 
 ### 2. Ejecuta el proyecto

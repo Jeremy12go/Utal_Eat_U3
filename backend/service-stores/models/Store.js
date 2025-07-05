@@ -9,7 +9,17 @@ const storeSchema = new mongoose.Schema({
   qualification: {
     type: String,
     enum: QUALI,
-    required: true},
+    required: true}
 });
+
+/// Método de instancia.
+storeSchema.methods.getResumen = function () {
+  return `${this.nombre} - ${this.categoria}`;
+};
+
+/// Método estático.
+storeSchema.statics.encontrarPorCategoria = function (cat) {
+  return this.find({ categoria: cat });
+};
 
 module.exports = mongoose.model('Store', storeSchema);
