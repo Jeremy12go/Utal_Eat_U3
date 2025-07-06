@@ -11,15 +11,6 @@ exports.getByName = async (req, res) => {
   }
 };
 
-exports.create = async (req, res) => {
-  try {
-    const newProfile = await Profile.create(req.body);
-    res.status(201).json(newProfile);
-  } catch(e) {
-    res.status(400).json({error: 'Datos inválidos', detalle: e.message });
-  }
-};
-
 exports.update = async (req, res) => {
   try {
     const updatedProfile = await Profile.findOneAndUpdate(
@@ -34,10 +25,4 @@ exports.update = async (req, res) => {
   } catch (e) {
     res.status(400).json({ error: 'Error al actualizar profile', detalle: e.message });
   }
-};
-
-exports.remove = (req, res) => {
-  const { name } = req.params;
-  profiles = profiles.filter(l => l.name !== name);
-  res.status(204).end();
 };

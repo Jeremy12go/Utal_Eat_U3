@@ -6,9 +6,8 @@ app.use(express.json()); // Middleware.
 
 const { mongoConnect } = require('./db/database');
 
-const profileRoutes = require('./routes/ProfileRoutes'); // Routes.
-const { mongo } = require('mongoose');
-app.use('/profiles', profileRoutes);
+const Routes = require('./routes/Routes'); // Routes.
+app.use('/accounts', Routes);
 
 const PORT = process.env.PORT || 3000;
 
@@ -21,4 +20,3 @@ mongoConnect()
   .catch((e) => {
     console.error('Error al conectar a MongoDB', error.message);
   });
-

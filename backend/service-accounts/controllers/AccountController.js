@@ -1,17 +1,5 @@
 const Account = require('../models/Account');
-
-
-exports.getByEmail = async (req, res) => {
-  try {
-    const account = await Account.findOne({ email: req.params.email });
-    if (!account) {
-      return res.status(404).json({ error: `Cuenta de correo ${req.params.idOrder} no encontrada` });
-    }
-    res.json(account);
-  } catch(e) {
-    res.status(500).json({error: 'Error al obtener cuenta', detalle: e.message });
-  }
-};
+const Profile = require('../models/Profile');
 
 exports.getProfileByEmail = async (req, res) => {
   try {
@@ -28,26 +16,21 @@ exports.getProfileByEmail = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    const newAccount = await Account.create(req.body);
-    res.status(201).json(newAccount);
+    const numProfiles = await Profile.countDocuments();
+    const profile = await Profile.create({
+      name: `user${numProfiles*100 + 1}`,  
+      phoneNumber: 111111111,
+      address: 'NO INGRESADA'
+    });
+    const { email, password } = req.body;
+    const account = await Account.create({
+      email: email,
+      password: password,
+      profile: profile._id
+    });
+    res.status(201).json(account);
   } catch(e) {
     res.status(400).json({error: 'Datos inválidos', detalle: e.message });
-  }
-};
-
-exports.update = async (req, res) => {
-  try {
-    const updatedAccount = await Account.findOneAndUpdate(
-      { email: req.params.email },
-      req.body,
-      { new: true, runValidators: true }
-    );
-    if (!updatedAccount) {
-      return res.status(404).json({ error: `Cuenta de correo ${req.params.email} no encontrada` });
-    }
-    res.json(updatedAccount);
-  } catch (e) {
-    res.status(400).json({ error: 'Error al actualizar cuenta', detalle: e.message });
   }
 };
 

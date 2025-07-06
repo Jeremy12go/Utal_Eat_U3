@@ -6,4 +6,4 @@ const accountSchema = new mongoose.Schema({
   profile: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile', required: true}
 });
 
-module.exports = mongoose.model('Profile', accountSchema);
+module.exports = mongoose.model('Account', accountSchema);
