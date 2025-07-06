@@ -7,12 +7,6 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -79,4 +73,92 @@
   border: 1px solid #ccc;
   box-sizing: border-box;
   margin-bottom: 10px;
+}
+
+.layout-principal{
+  display: flex;
+  height: 100vh;
+}
+
+.contenido-principal {
+  flex: 1;
+  overflow: auto;
+}
+
+.sub-contenido {
+  display: flex;
+  height: 100%;
+}
+
+.contenido-izquierdo {
+  flex: 1;
+  padding: 20px;
+  background-color: #a7d562;
+}
+
+.contenido-derecho {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+.menu-lateral{
+  width: 9%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #434343;
+}
+
+
+.menu-boton {
+  height: 100px;
+  font-size: 20px;
+  background-color: #434343;
+  color: white;
+  border: none;
+  width: 100%;
+}
+
+.logo-box{
+  height: 100px;
+  font-size: 30px;
+  font-weight: bold;
+  background-color: #434343;
+  color: white;
+  border: none;
+  width: 100%;
+}
+
+.menu-boton:hover {
+  background-color: #353535;
+  color: white;
+}
+
+.icons{
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.icons-special{
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.barra-lateral{
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.buscador{
+  width: 300px;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

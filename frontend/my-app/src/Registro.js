@@ -1,5 +1,4 @@
 import React from 'react';
-import contenedor from "./Contenedor";
 import Contenedor from "./Contenedor";
 
 function Registro({ cambiarPantalla }) {
@@ -47,7 +46,7 @@ function Registro({ cambiarPantalla }) {
                 </div>
                 <div style={{marginTop: '20px', marginBottom: '20px'}}>
                     <button
-                        onClick={() => cambiarPantalla("original")}
+                        onClick={() => cambiarPantalla("inicio")}
                         className="boton-iniciar">
                         Registrar
                     </button>
