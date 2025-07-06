@@ -5,9 +5,9 @@ const controllerProfile = require('../controllers/ProfileController');
 
 router.get('/:email/profile', controllerAccount.getProfileByEmail);
 router.post('/', controllerAccount.create);
-router.delete('/:id', controllerAccount.remove);
+router.delete('/:email', controllerAccount.remove);
 
-router.get('/:name', controllerProfile.getByName);
-router.put('/:name', controllerProfile.update);
+router.get('/:_id', controllerProfile.getById);
+router.put('/:_id', controllerProfile.update);
 
 module.exports = router;

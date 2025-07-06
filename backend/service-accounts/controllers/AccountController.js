@@ -18,7 +18,7 @@ exports.create = async (req, res) => {
   try {
     const numProfiles = await Profile.countDocuments();
     const profile = await Profile.create({
-      name: `user${numProfiles*100 + 1}`,  
+      name: `user${numProfiles + 1}`,  
       phoneNumber: 111111111,
       address: 'NO INGRESADA'
     });
