@@ -12,8 +12,9 @@ exports.getAll = async (req, res) => {
 exports.getByIdOrder = async (req, res) => {
   try {
     const rating = await Rating.findOne({ idOrder: req.params.idOrder });
-    if (!rating)
+    if (!rating) {
       return res.status(404).json({ error: `Rating de orden ${req.params.idOrder} no encontrado` });
+    }
     res.json(rating);
   } catch(e) {
     res.status(500).json({error: 'Error al obtener Ratings', detalle: e.message });
@@ -46,7 +47,7 @@ exports.update = async (req, res) => {
 };
 
 exports.remove = async (req, res) => {
-    try {
+  try {
     const deletedRating = await Rating.findOneAndDelete({ idOrder: req.params.idOrder });
     if (!deletedRating) {
       return res.status(404).json({ error: `Rating de orden ${req.params.idOrder} no encontrado` });

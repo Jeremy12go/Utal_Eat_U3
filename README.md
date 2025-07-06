@@ -13,6 +13,10 @@ Es una aplicación que consiste en la solicitud de comida a domicilio,
 - React
 - Axios
 
+### Bases de Datos
+- MongoDB
+- Redis
+
 ### DevOps
 - Docker
 - Docker Compose
