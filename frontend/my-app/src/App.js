@@ -1,34 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import {useState} from "react";
-
-function Pantalla1({cambiarPantalla}) {
-  return (
-      <div>
-        <h2>Screen 1</h2>
-        <button onClick={() => cambiarPantalla("original")}>Ir a Pantalla de inicio</button>
-      </div>
-  );
-}
-
-function Contenedor({ children }) {
-    return (
-        <div style={{
-            maxWidth: '400px',
-            margin: '0 auto',
-            padding: '20px',
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            backgroundColor: '#f9f9f9'
-        }}>
-            {children}
-        </div>
-    );
-}
+import Registro from "./Registro";
+import Contenedor from "./Contenedor";
 
 function App() {
 
-  const [pantallaActual, setPantallaActual] = useState("A");
+  const [pantallaActual, setPantallaActual] = useState("original");
 
   const cambiarPantalla = (nuevaPantalla) => {
     setPantallaActual(nuevaPantalla);
@@ -39,42 +17,47 @@ function App() {
             <header className="Contenedor">
                 {pantallaActual === "original" ? (
                     <>
-                        <p style={{ fontWeight: 'bold', fontSize: '70px' }}>
+                        <p style={{ fontWeight: 'bold', fontSize: '70px', margin:'40px'}}>
                             Utal Eats
                         </p>
                         <Contenedor>
                             <div style={{ textAlign: 'center' }}>
-                                <p style={{ fontSize: '35px', marginBottom: '4px', marginTop: '0px'}}>
+                                <p style={{ fontSize: '35px', marginBottom: '4px', marginTop: '0px'}}
+                                className="text-titulos">
                                     Iniciar sesión
                                 </p>
-                                <p style={{ fontSize: '16px' , marginTop: '0'}}>
+                                <p style={{ fontSize: '16px' , marginTop: '0'}}
+                                   className="text-common">
                                     ¿Primera vez?{' '}
                                     <span
-                                        onClick={() => cambiarPantalla("pantalla1")}
-                                        style={{ color: 'blue', cursor: 'pointer' }}
+                                        onClick={() => cambiarPantalla("Registro")}
+                                        className="text-subrayado"
                                         >
                                         Haz click aquí!
                                     </span>
                                 </p>
-                                <div style={{ fontSize: '16px', textAlign: 'left', maxWidth: '300px', margin: '0 auto' }}>
-                                    <p style={{marginBottom: '5px'}}>
-                                        Usuario</p>
-                                    <input type="text" placeholder="Escribe aquí..." style={{ width: '100%' }} />
-                                    <p style={{marginBottom: '5px'}}>
-                                        Contraseña</p>
-                                    <input type="text" placeholder="Escribe aquí..." style={{ width: '100%' }} />
+                                <div style={{ fontSize: '16px', textAlign: 'left', maxWidth: '300px', margin: '0 auto', marginTop: '30px'}}>
+                                    <p style={{marginBottom: '10px'}}
+                                       className="text-common">
+                                        Email* </p>
+                                    <input type="text" placeholder="Email" className="input-text" />
+                                    <p style={{marginBottom: '10px'}}
+                                       className="text-common">
+                                        Contraseña*</p>
+                                    <input type="password" placeholder="Contraseña" className="input-text" />
                                 </div>
                             </div>
-                            <div style={{marginTop: '20px'}}>
+                            <div style={{marginTop: '20px', marginBottom: '20px'}}>
                                 <button
-                                    onClick={() => cambiarPantalla("pantalla1")}>
+                                    //onClick={() => cambiarPantalla("Principal")}
+                                    className="boton-iniciar">
                                     Iniciar Sesión
                                 </button>
                             </div>
                         </Contenedor>
                     </>
                 ) : (
-                    <Pantalla1 cambiarPantalla={cambiarPantalla} />
+                    <Registro cambiarPantalla={cambiarPantalla} />
                 )}
             </header>
         </div>

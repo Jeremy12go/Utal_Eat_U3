@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Pantalla1({ cambiarPantalla }) {
+function Principal({ cambiarPantalla }) {
     return (
         <div>
             <h2>Pantalla 1</h2>
@@ -9,4 +9,4 @@ function Pantalla1({ cambiarPantalla }) {
     );
 }
 
-export default Pantalla1;
+export default Principal;
