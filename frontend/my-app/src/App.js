@@ -1,15 +1,17 @@
 import './App.css';
-import {useState} from "react";
+import { useState } from "react";
 import Registro from "./Registro";
 import Principal from "./Principal";
 import Contenedor from "./Contenedor";
+import PedidosDemo from "./Componentes/PedidosDemo";
+import { loginAccount } from './API/APIGateway';
 
 function App() {
 
     const [pantallaActual, setPantallaActual] = useState("inicio");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [errorLogin, setErrorLogin] = useState(false);
+    const [ email , setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
     const cambiarPantalla = (nuevaPantalla) => {
         if (nuevaPantalla === 'inicio'){
             setErrorLogin(false);
@@ -24,8 +26,21 @@ function App() {
         return email === "" && password === "";
     };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await loginAccount(email, password);
+      console.log('Cuenta creada:', res.data);
+    } catch (e) {
+      console.error('Error al registrar:', e.response?.data || e.message);
+    }
+  };
+
     return (
         <div className="App">
+            {pantallaActual === "PedidosDemo" ? (
+                <PedidosDemo volverAlInicio={() => setPantallaActual("original")} />
+            ) : (
             <header className="Contenedor">
                 {pantallaActual === "inicio" ? (
                     <>
@@ -79,6 +94,7 @@ function App() {
                                 <button
                                     onClick={() => {
                                         if (validarLogin(email, password)) {
+                                            handleSubmit();
                                             cambiarPantalla("Principal");
                                             setErrorLogin(false);
                                         } else {
@@ -96,6 +112,11 @@ function App() {
                                 )}
                             </div>
                         </Contenedor>
+                        <div style={{marginTop: '20px'}}>
+                            <button onClick={() => setPantallaActual("PedidosDemo")}>
+                            Ir a TESTS
+                            </button>
+                        </div>
                     </>
                 ) : pantallaActual === "Registro" ? (
                     <Registro cambiarPantalla={cambiarPantalla} />
@@ -103,6 +124,7 @@ function App() {
                     <Principal cambiarPantalla={cambiarPantalla} />
                 ) : null}
             </header>
+        )}
         </div>
     );
 }

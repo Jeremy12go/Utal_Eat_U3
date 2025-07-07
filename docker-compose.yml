@@ -1,0 +1,65 @@
+version: '3.9'
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  gateway:
+    build: ./backend/service-gateway
+    ports:
+      - "3004:3004"
+    depends_on:
+      - accounts
+      - orders
+      - ratings
+      - stores
+
+  accounts:
+    build: ./backend/service-accounts
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/account_db
+    depends_on:
+      - mongo
+
+  orders:
+    build: ./backend/service-orders
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/order_db
+    depends_on:
+      - mongo
+
+  ratings:
+    build: ./backend/service-ratings
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/rating_db
+    depends_on:
+      - mongo
+
+  stores:
+    build: ./backend/service-stores
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/store_db
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend/my-app
+    ports:
+      - "5173:80"
+    depends_on:
+      - gateway
+
+volumes:
+  mongo-data:
