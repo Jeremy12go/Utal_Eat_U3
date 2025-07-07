@@ -47,9 +47,10 @@ Antes de ejecutar la aplicación, se debe tener instalado:
 
 ## Comandos para front
 
+
+### `cd frontend/my-app`
+Cambiamos el directorio
 ### `npm install`
 Instalamos las dependencias
-### `cd my-app`
-Cambiamos el directorio
 ### `npm start`
 Iniciamos la aplicación
