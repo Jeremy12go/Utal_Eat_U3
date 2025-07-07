@@ -1,11 +1,8 @@
 const Order = require('../models/Order');
 
-
 exports.getByIdProfile = async (req, res) => {
   try {
-    const orders = await Order.find({
-      idProfile: { $regex: new RegExp(req.params.idProfile, 'i') }
-    });
+    const orders = await Order.find({ idProfile: req.params.idProfile } );
     if (orders.length === 0) {
       return res.status(404).json({ error: 'Orden no encontrada' });
     }
@@ -17,37 +14,45 @@ exports.getByIdProfile = async (req, res) => {
 
 exports.create = async (req, res) => {
    try {
-      const numProfiles = await Order.countDocuments();
+      const numOrder = await Order.countDocuments();
+      const { idProfile } = req.body;
+
       const order = await Order.create({
-        name: `user${numProfiles + 1}`,  
-        phoneNumber: 111111111,
-        address: 'NO INGRESADA'
+        id: `order${numOrder + 1}`,  
+        state: 'Vigente',
+        idProfile,
       });
-      const { email, password } = req.body;
-      const account = await Account.create({
-        email: email,
-        password: password,
-        profile: profile._id
-      });
-      res.status(201).json(account);
+      res.status(201).json(order);
     } catch(e) {
       res.status(400).json({error: 'Datos inválidos', detalle: e.message });
     }
 };
 
-exports.update = (req, res) => {
-  const { id } = req.params;
-  const order = orders.find(l => l.id === id);
-  if (!order) return res.status(404).json({ error: 'Orden no encontrada' });
+exports.update = async (req, res) => {
+  try {
+    const order = await Order.findOneAndUpdate(
+      { id: req.params.id },
+      req.body,
+       { new: true, runValidators: true }
+    );
 
-  const { listProducts, idAccount } = req.body;
-  order.listProducts = listProducts;
-  order.idAccount = idAccount;
-  res.json(order);
+    if(!order)
+      return res.status(404).json({ error: 'Orden no encontrada' } );
+
+    res.json(order);
+  } catch(e) {
+    res.status(400).json({ error: 'Error al actualizar', detalle: e.message });
+  }
 };
 
-exports.remove = (req, res) => {
-  const { id } = req.params;
-  order = orders.filter(l => l.id !== id);
-  res.status(204).end();
+exports.remove = async (req, res) => {
+  try {
+    const removedOrder = await Order.findByIdAndDelete({id: req.params.id});
+    if (!removedOrder)
+      return res.status(404).json({ error: 'Orden no encontrada' });
+
+    res.status(204).end();
+  } catch (e) {
+    res.status(500).json({ error: 'Error al eliminar orden', detalle: e.message });
+  }
 };

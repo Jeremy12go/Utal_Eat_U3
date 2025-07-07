@@ -55,7 +55,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
-    const removedProduct = await Product.findByIdAndDelete(req.params.id);
+    const removedProduct = await Product.findByIdAndDelete({id: req.params.id});
     if (!removedProduct)
       return res.status(404).json({ error: 'Producto no encontrado' });
 

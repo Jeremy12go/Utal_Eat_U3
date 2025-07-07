@@ -18,6 +18,7 @@ exports.create = async (req, res) => {
   try {
     const numProfiles = await Profile.countDocuments();
     const profile = await Profile.create({
+      id: `profile0${numProfiles + 1}`,
       name: `user${numProfiles + 1}`,  
       phoneNumber: 111111111,
       address: 'NO INGRESADA'
@@ -26,7 +27,7 @@ exports.create = async (req, res) => {
     const account = await Account.create({
       email: email,
       password: password,
-      profile: profile._id
+      profile: profile.id
     });
     res.status(201).json(account);
   } catch(e) {

@@ -5,8 +5,7 @@ const STATE = ['Finalizada', 'Vigente']
 const orderSchema = new mongoose.Schema({
   id: { type: String, required: true },
   state: { type: String, emun: STATE },
-  phoneNumber: { type: String, required: true },
-  productList: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Product'} ],
+  productList: [ { type: String } ],
   idProfile: { type: String, required: true} 
 });
 

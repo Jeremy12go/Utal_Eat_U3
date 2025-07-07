@@ -7,7 +7,7 @@ router.get('/:email/profile', controllerAccount.getProfileByEmail);
 router.post('/', controllerAccount.create);
 router.delete('/:email', controllerAccount.remove);
 
-router.get('/:_id', controllerProfile.getById);
-router.put('/:_id', controllerProfile.update);
+router.get('/:id', controllerProfile.getById);
+router.put('/:id', controllerProfile.update);
 
 module.exports = router;

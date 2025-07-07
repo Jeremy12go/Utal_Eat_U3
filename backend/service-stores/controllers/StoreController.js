@@ -31,8 +31,8 @@ exports.getLogo = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const store = await Store.findByIdAndUpdate(
-      req.params.id,
+    const store = await Store.findOneAndUpdate(
+      { id: req.params.id },
       req.body,
       { new: true, runValidators: true }
     );
@@ -48,7 +48,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
-    const removedStore = await Store.findByIdAndDelete(req.params.id);
+    const removedStore = await Store.findByIdAndDelete({id: req.params.id});
     if (!removedStore)
       return res.status(404).json({ error: 'Tienda no encontrada' });
 

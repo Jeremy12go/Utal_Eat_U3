@@ -1,12 +1,22 @@
 const express = require('express');
+require('dotenv').config();
+
 const app = express();
-const profileRoutes = require('./routes/StoreRoutes');
+app.use(express.json()); 
 
-app.use(express.json()); // Para leer JSON del body
+const { mongoConnect } = require('./db/database');
 
-app.use('/stores', profileRoutes);
+const Routes = require('./routes/OrderRoutes');
+app.use('/orders', Routes);
 
 const PORT = process.env.PORT || 3002;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+
+mongoConnect()
+  .then(() => {
+    app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+  })
+  .catch((e) => {
+    console.error('Error al conectar a MongoDB', error.message);
+  });

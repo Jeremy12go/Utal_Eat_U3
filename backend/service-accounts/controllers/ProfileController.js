@@ -2,7 +2,7 @@ const Profile = require('../models/Profile');
 
 exports.getById = async (req, res) => {
   try {
-    const profile = await Profile.findById(req.params);
+    const profile = await Profile.findOne({ id: req.params.id });
     if(!profile)
       return res.status(404).json({ error: 'Perfil no encontrado' })
     res.json(profile);
@@ -14,7 +14,7 @@ exports.getById = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const updatedProfile = await Profile.findOneAndUpdate(
-      { _id: req.params },
+      { id: req.params.id },
       req.body,
       { new: true, runValidators: true }
     );
