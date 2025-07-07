@@ -3,6 +3,7 @@ import './App.css';
 import {useState} from "react";
 import Registro from "./Registro";
 import Contenedor from "./Contenedor";
+import PedidosDemo from "./Componentes/PedidosDemo";
 
 function App() {
 
@@ -14,6 +15,9 @@ function App() {
 
     return (
         <div className="App">
+            {pantallaActual === "PedidosDemo" ? (
+                <PedidosDemo volverAlInicio={() => setPantallaActual("original")} />
+            ) : (
             <header className="Contenedor">
                 {pantallaActual === "original" ? (
                     <>
@@ -55,11 +59,17 @@ function App() {
                                 </button>
                             </div>
                         </Contenedor>
+                        <div style={{marginTop: '20px'}}>
+                            <button onClick={() => setPantallaActual("PedidosDemo")}>
+                            Ir a TESTS
+                            </button>
+                        </div>
                     </>
                 ) : (
                     <Registro cambiarPantalla={cambiarPantalla} />
                 )}
             </header>
+        )}
         </div>
     );
 }
