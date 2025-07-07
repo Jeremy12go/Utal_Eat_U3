@@ -4,10 +4,8 @@ require('dotenv').config();
 const app = express();
 app.use(express.json()); 
 
-const StoreRoutes = require('./routes/StoreRoutes');
-const ProductRoutes = require('./routes/ProductRoutes');
+const StoreRoutes = require('./routes/Routes');;
 app.use('/stores', StoreRoutes);
-app.use('/product', ProductRoutes);
 
 const { mongoConnect } = require('./db/database');
 

@@ -1,21 +1,12 @@
 const Product = require('../models/Product');
 
-
-exports.getAll = async (req, res) => {
-    try {
-        const products = await Product.find();
-        res.json(products);
-    } catch(e){
-         res.status(500).json({error: 'Error al obtener productos', detalle: e.message });
-    }
-}
-
-exports.getById = async (req, res) => {
+exports.getByIdStore = async (req, res) => {
   try {
-    const product = await Product.find(req.params);
-    if (!product) 
+    const products = await Product.find({ idStore: req.params.idStore });
+    if ( products.length === 0 ) {
       return res.status(404).json({ error: 'Producto no encontrado' });
-    res.json(product);
+    }
+    res.json(products);
   } catch(e){
     res.status(500).json({error: 'Error al obtener producto', detalle: e.message });
   }
