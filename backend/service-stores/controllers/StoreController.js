@@ -5,8 +5,9 @@ exports.getByCity = async (req, res) => {
     const stores = await Store.find({
       city: { $regex: new RegExp(req.params.city, 'i') }
     });
-    if (stores.length === 0) 
+    if (stores.length === 0) {
       return res.status(404).json({ error: 'Tienda no encontrada' });
+    }
     res.json(stores);
   } catch(e){
     res.status(500).json({error: 'Error al obtener tienda', detalle: e.message });
