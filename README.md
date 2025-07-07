@@ -1,6 +1,8 @@
 # Utalca Eat
 
-Es una aplicación que consiste en la solicitud de comida a domicilio,
+Es una aplicación que consiste en la solicitud de comida a domicilio, la cual permite visualizar tiendas
+cercanas a la dirección ingresada, permitiendo conocer los platillos que ofrece cada tienda. Al realizar un 
+pedido podras calificar y dejar un comentario al local al que realizaste dicho pedido :D!.
 ...
 ---
 
