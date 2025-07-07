@@ -1,13 +1,5 @@
 const Rating = require('../models/Rating');
 
-exports.getAll = async (req, res) => {
-  try {
-    const ratings = await Rating.find();
-    res.json(ratings);
-  } catch(e) {
-    res.status(500).json({error: 'Error al obtener Ratings', detalle: e.message });
-  }
-};
 
 exports.getByIdOrder = async (req, res) => {
   try {
@@ -16,6 +8,18 @@ exports.getByIdOrder = async (req, res) => {
       return res.status(404).json({ error: `Rating de orden ${req.params.idOrder} no encontrado` });
     }
     res.json(rating);
+  } catch(e) {
+    res.status(500).json({error: 'Error al obtener Ratings', detalle: e.message });
+  }
+};
+
+exports.getByIdStore = async (req, res) => {
+  try {
+    const ratings = await Rating.find({ idStore: req.params.idStore });
+    if ( ratings === 0) {
+      return res.status(404).json({ error: `Ratings de tienda ${req.params.idStore} no encontrados` });
+    }
+    res.json(ratings);
   } catch(e) {
     res.status(500).json({error: 'Error al obtener Ratings', detalle: e.message });
   }
