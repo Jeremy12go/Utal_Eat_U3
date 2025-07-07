@@ -1,21 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
 import { useState } from "react";
 import Registro from "./Registro";
+import Principal from "./Principal";
 import Contenedor from "./Contenedor";
 import PedidosDemo from "./Componentes/PedidosDemo";
 import { loginAccount } from './API/APIGateway';
 
 function App() {
 
-  const [pantallaActual, setPantallaActual] = useState("original");
+    const [pantallaActual, setPantallaActual] = useState("inicio");
+    const [errorLogin, setErrorLogin] = useState(false);
+    const [ email , setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const cambiarPantalla = (nuevaPantalla) => {
+        if (nuevaPantalla === 'inicio'){
+            setErrorLogin(false);
+            setEmail("");
+            setPassword("");
+        }
+        setPantallaActual(nuevaPantalla);
+    }
 
-  const cambiarPantalla = (nuevaPantalla) => {
-    setPantallaActual(nuevaPantalla);
-  }
-
-  const [ email , setEmail ] = useState('');
-  const [ password, setPassword ] = useState('');
+    const validarLogin = (email, password) => {
+        //return email === "admin@utal.cl" && password === "1234";
+        return email === "" && password === "";
+    };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +42,7 @@ function App() {
                 <PedidosDemo volverAlInicio={() => setPantallaActual("original")} />
             ) : (
             <header className="Contenedor">
-                {pantallaActual === "original" ? (
+                {pantallaActual === "inicio" ? (
                     <>
                         <p style={{ fontWeight: 'bold', fontSize: '70px', margin:'40px'}}>
                             Utal Eats
@@ -44,6 +53,7 @@ function App() {
                                 className="text-titulos">
                                     Iniciar sesión
                                 </p>
+
                                 <p style={{ fontSize: '16px' , marginTop: '0'}}
                                    className="text-common">
                                     ¿Primera vez?{' '}
@@ -54,30 +64,52 @@ function App() {
                                         Haz click aquí!
                                     </span>
                                 </p>
+
                                 <div style={{ fontSize: '16px', textAlign: 'left', maxWidth: '300px', margin: '0 auto', marginTop: '30px'}}>
                                     <p style={{marginBottom: '10px'}}
                                        className="text-common">
                                         Email* </p>
-                                    <input type="email" placeholder="Email"
-                                        value={email} onChange={ (e) => setEmail(e.target.value) } 
-                                        className="input-text" />
+                                    <input
+                                        type="text"
+                                        placeholder="Email"
+                                        className="input-text"
+                                        value={email}
+                                        onChange={(e)=> setEmail(e.target.value)
+                                    }/>
+
                                     <p style={{marginBottom: '10px'}}
                                        className="text-common">
                                         Contraseña*</p>
-                                    <input type="password" placeholder="Contraseña"
-                                        value={password} onChange={ (e) => setPassword(e.target.value)}
-                                        className="input-text" />
+                                    <input
+                                        type="password"
+                                        placeholder="Contraseña"
+                                        className="input-text"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+
                                 </div>
                             </div>
-                            <div style={{marginTop: '20px', marginBottom: '20px'}}>
+                            <div style={{height: '45px' ,marginTop: '20px', marginBottom: '20px'}}>
                                 <button
                                     onClick={() => {
-                                        handleSubmit();
-                                        cambiarPantalla("Principal");
+                                        if (validarLogin(email, password)) {
+                                            handleSubmit();
+                                            cambiarPantalla("Principal");
+                                            setErrorLogin(false);
+                                        } else {
+                                            setErrorLogin(true);
+                                        }
                                     }}
-                                    className="boton-iniciar">
+                                    className="boton-iniciar"
+                                >
                                     Iniciar Sesión
                                 </button>
+                                {errorLogin && (
+                                    <p style={{ color: 'red', marginTop: '10px' }}>
+                                        Credenciales incorrectas.
+                                    </p>
+                                )}
                             </div>
                         </Contenedor>
                         <div style={{marginTop: '20px'}}>
@@ -86,9 +118,11 @@ function App() {
                             </button>
                         </div>
                     </>
-                ) : (
+                ) : pantallaActual === "Registro" ? (
                     <Registro cambiarPantalla={cambiarPantalla} />
-                )}
+                ) : pantallaActual === "Principal" ? (
+                    <Principal cambiarPantalla={cambiarPantalla} />
+                ) : null}
             </header>
         )}
         </div>

@@ -78,7 +78,7 @@ function Registro({ cambiarPantalla }) {
                     <button
                         onClick={() => {
                             handleSubmit();
-                            cambiarPantalla("original");
+                            cambiarPantalla("inicio");
                         }}
                         className="boton-iniciar">
                         Registrar
