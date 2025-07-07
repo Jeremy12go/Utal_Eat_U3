@@ -17,13 +17,16 @@ exports.getProfileByEmail = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const numProfiles = await Profile.countDocuments();
+
+    const { email, password, name, phoneNumber, address } = req.body;
+
     const profile = await Profile.create({
       id: `profile0${numProfiles + 1}`,
-      name: `user${numProfiles + 1}`,  
-      phoneNumber: 111111111,
-      address: 'NO INGRESADA'
+      name: name,  
+      phoneNumber: phoneNumber,
+      address: address
     });
-    const { email, password } = req.body;
+    
     const account = await Account.create({
       email: email,
       password: password,

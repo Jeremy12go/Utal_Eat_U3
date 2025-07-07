@@ -1,8 +1,25 @@
-import React from 'react';
-import contenedor from "./Contenedor";
+import React, { useState } from 'react';
 import Contenedor from "./Contenedor";
+import { registerAccount } from './API/APIGateway';
 
 function Registro({ cambiarPantalla }) {
+
+    const [ email , setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ name, setName ] = useState('');
+    const [ phoneNumber, setPhoneNumber ] = useState('');
+    const [ address, setAddress ] = useState('');
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const res = await registerAccount(email, password, name, phoneNumber, address);
+        console.log('Cuenta creada:', res.data);
+    } catch (e) {
+        console.error('Error al registrar:', e.response?.data || e.message);
+    }
+    };
+
     return (
         <div>
             <p style={{ fontWeight: 'bold', fontSize: '70px', margin:'40px' }}>
@@ -15,30 +32,42 @@ function Registro({ cambiarPantalla }) {
                         Registro
                     </p>
                     <div style={{ fontSize: '16px', textAlign: 'left', maxWidth: '300px', margin: '0 auto', marginTop: '30px'}}>
+                        
                         <p style={{marginBottom: '10px'}}
                            className="text-common">
                             Nombre de usuario* </p>
-                        <input type="text" placeholder="Usuario" className="input-text" />
+                        <input type="name" placeholder="Usuario" 
+                            value={name} onChange={ (e) => setName(e.target.value) }
+                            className="input-text" />   
 
                         <p style={{marginBottom: '10px'}}
                            className="text-common">
                             Telefono*</p>
-                        <input type="text" placeholder="+56912345678" className="input-text" />
+                        <input type="phoneNumber" placeholder="911111111"
+                            value={phoneNumber} onChange={ (e) => setPhoneNumber(e.target.value) }
+                            className="input-text" />
 
                         <p style={{marginBottom: '10px'}}
                            className="text-common">
                             Dirección*</p>
-                        <input type="text" placeholder="Ciudad/Calle/Numero" className="input-text" />
+                        <input type="address" placeholder="Ciudad/Calle/Numero"
+                            value={address} onChange={ (e) => setAddress(e.target.value) }
+                            className="input-text" />
 
                         <p style={{marginBottom: '10px'}}
                            className="text-common">
                             Email*</p>
-                        <input type="text" placeholder="Email" className="input-text" />
+                        <input type="email" placeholder="Email" 
+                            value={email} onChange={ (e) => setEmail(e.target.value) }
+                            className="input-text" />
 
                         <p style={{marginBottom: '10px'}}
                            className="text-common">
                             Contraseña*</p>
-                        <input type="password" placeholder="Contraseña" className="input-text" />
+                        <input type="password" placeholder="Contraseña"
+                            value={password} onChange={ (e) => setPassword(e.target.value) }
+                            className="input-text" />
+
                         <p style={{marginBottom: '10px'}}
                            className="text-common">
                             Se creara un perfil automaticamente asociado a tu dirección de correo.
@@ -47,7 +76,10 @@ function Registro({ cambiarPantalla }) {
                 </div>
                 <div style={{marginTop: '20px', marginBottom: '20px'}}>
                     <button
-                        onClick={() => cambiarPantalla("original")}
+                        onClick={() => {
+                            handleSubmit();
+                            cambiarPantalla("original");
+                        }}
                         className="boton-iniciar">
                         Registrar
                     </button>

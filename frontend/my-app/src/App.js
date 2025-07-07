@@ -1,9 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import {useState} from "react";
+import { useState } from "react";
 import Registro from "./Registro";
 import Contenedor from "./Contenedor";
 import PedidosDemo from "./Componentes/PedidosDemo";
+import { loginAccount } from './API/APIGateway';
 
 function App() {
 
@@ -12,6 +13,19 @@ function App() {
   const cambiarPantalla = (nuevaPantalla) => {
     setPantallaActual(nuevaPantalla);
   }
+
+  const [ email , setEmail ] = useState('');
+  const [ password, setPassword ] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await loginAccount(email, password);
+      console.log('Cuenta creada:', res.data);
+    } catch (e) {
+      console.error('Error al registrar:', e.response?.data || e.message);
+    }
+  };
 
     return (
         <div className="App">
@@ -44,16 +58,23 @@ function App() {
                                     <p style={{marginBottom: '10px'}}
                                        className="text-common">
                                         Email* </p>
-                                    <input type="text" placeholder="Email" className="input-text" />
+                                    <input type="email" placeholder="Email"
+                                        value={email} onChange={ (e) => setEmail(e.target.value) } 
+                                        className="input-text" />
                                     <p style={{marginBottom: '10px'}}
                                        className="text-common">
                                         Contraseña*</p>
-                                    <input type="password" placeholder="Contraseña" className="input-text" />
+                                    <input type="password" placeholder="Contraseña"
+                                        value={password} onChange={ (e) => setPassword(e.target.value)}
+                                        className="input-text" />
                                 </div>
                             </div>
                             <div style={{marginTop: '20px', marginBottom: '20px'}}>
                                 <button
-                                    //onClick={() => cambiarPantalla("Principal")}
+                                    onClick={() => {
+                                        handleSubmit();
+                                        cambiarPantalla("Principal");
+                                    }}
                                     className="boton-iniciar">
                                     Iniciar Sesión
                                 </button>

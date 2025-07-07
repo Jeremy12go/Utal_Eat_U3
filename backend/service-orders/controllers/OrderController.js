@@ -32,6 +32,7 @@ exports.update = async (req, res) => {
   try {
     const order = await Order.findOneAndUpdate(
       { id: req.params.id },
+      { $push: { productList: req.body.product } },
       req.body,
        { new: true, runValidators: true }
     );
