@@ -1,17 +1,31 @@
 import React, {useState} from 'react';
+import ContenedorItems from "./ContenedorItems";
+import ContenedorComida from "./ContenedorComida";
 
 const tiendas = [
     {
         id: 1,
         nombre: 'Tienda A',
-        comidas: ['Pizza', 'Hamburguesa'],
+        especialidad: '???',
+        rating: '* * *',
+        comidas: [
+            { id: 1, nombre: 'Pizza' },
+            { id: 2, nombre: 'Hamburguesa' }
+        ],
     },
     {
         id: 2,
         nombre: 'Tienda B',
-        comidas: ['Empanada', 'Tacos'],
+        especialidad: '???',
+        rating: '* * * * *',
+        comidas: [
+            { id: 3, nombre: 'Empanada' },
+            { id: 4, nombre: 'Tacos' }
+        ],
     },
 ];
+
+const todasLasComidas = tiendas.flatMap(tienda => tienda.comidas);
 
 function Principal({ cambiarPantalla }) {
 
@@ -33,6 +47,8 @@ function Principal({ cambiarPantalla }) {
             }
         }
     };
+
+    const comidasAMostrar = tiendaSeleccionada ? tiendaSeleccionada.comidas : todasLasComidas;
 
     return (
         <div className="layout-principal">
@@ -60,14 +76,40 @@ function Principal({ cambiarPantalla }) {
             </div>
             <div className="contenido-principal">
                 <div className="barra-lateral">
-                    <input type="text" placeholder="Buscar productos/tiendas" className="buscador" />
+                    <div className="input-container">
+                        <img src="/lupa.png" alt="buscar" className="lupa-icono" />
+                        <input type="text" placeholder="Buscar productos/tiendas" className="buscador" />
+                    </div>
+                    <button className="boton-perfil">
+                        <img src="/usuario.png" alt="Perfil" className="img-perfil" />
+                    </button>
                 </div>
                 <div className="sub-contenido">
-                    <div className="contenido-derecho">
-                        Parte Derecha
-                    </div>
+                    {/* Parte Izquierda: Tiendas */}
                     <div className="contenido-izquierdo">
-                        parte2
+                        <div style={{ display: 'flex', flexDirection: 'column'}}>
+                            {tiendas.map((tienda) => (
+                                <ContenedorItems key={tienda.id} item={tienda} onClick={seleccionarTienda} />
+                            ))}
+                        </div>
+                    </div>
+                    {/* Parte Derecha: Comidas */}
+                    <div className="contenido-derecho">
+                        {comidasAMostrar.length > 0 ? (
+                            <div style={{ display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                                gap: '15px'}}>
+                                {comidasAMostrar.map((comida, index) => (
+                                    <ContenedorComida
+                                        key={comida.id}
+                                        item={comida}
+                                        onClick={() => seleccionarComida(comida)}
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <p>No hay comidas para mostrar</p>
+                        )}
                     </div>
                 </div>
             </div>

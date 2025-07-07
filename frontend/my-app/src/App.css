@@ -82,7 +82,9 @@
 
 .contenido-principal {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .sub-contenido {
@@ -92,14 +94,16 @@
 
 .contenido-izquierdo {
   flex: 1;
-  padding: 20px;
-  background-color: #a7d562;
+  background-color: #ffffff;
+  border-right: 2px solid #ccc;
+  border-top: 2px solid #ccc;
 }
 
 .contenido-derecho {
-  flex: 1;
-  padding: 20px;
+  flex: 1.6;
   background-color: #ffffff;
+  padding: 10px;
+  border-top: 2px solid #ccc;
 }
 
 .menu-lateral{
@@ -118,6 +122,7 @@
   color: white;
   border: none;
   width: 100%;
+  cursor: pointer;
 }
 
 .logo-box{
@@ -151,14 +156,45 @@
 
 .barra-lateral{
   display: flex;
+  align-items: center;
   gap: 10px;
   padding: 10px;
 }
 
 .buscador{
+  padding: 12px 12px 8px 35px;
   width: 300px;
-  padding: 8px 12px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #6e6e6e;
   border-radius: 4px;
+}
+
+.lupa-icono {
+  position: absolute;
+  left: 10px;
+  top: 0%;
+  transform: translateY(50%);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.input-container {
+  position: relative;
+  display: inline-block;
+}
+
+.boton-perfil {
+  margin-left: auto;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.img-perfil {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }

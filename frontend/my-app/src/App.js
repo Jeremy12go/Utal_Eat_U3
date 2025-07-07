@@ -20,7 +20,8 @@ function App() {
     }
 
     const validarLogin = (email, password) => {
-        return email === "admin@utal.cl" && password === "1234";
+        //return email === "admin@utal.cl" && password === "1234";
+        return email === "" && password === "";
     };
 
     return (
