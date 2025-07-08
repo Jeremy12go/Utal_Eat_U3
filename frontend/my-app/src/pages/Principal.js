@@ -1,33 +1,27 @@
 import React, {useState} from 'react';
-import ContenedorItems from "./ContenedorItems";
-import ContenedorComida from "./ContenedorComida";
+import ContenedorItems from "../components/ContenedorItems";
+import ContenedorComida from "../components/ContenedorComida";
+import { storeByCity } from '../API/APIGateway.js';
+import { getProfile } from '../API/APIGateway.js';
 
-const tiendas = [
-    {
-        id: 1,
-        nombre: 'Tienda A',
-        especialidad: '???',
-        rating: '* * *',
-        comidas: [
-            { id: 1, nombre: 'Pizza' },
-            { id: 2, nombre: 'Hamburguesa' }
-        ],
-    },
-    {
-        id: 2,
-        nombre: 'Tienda B',
-        especialidad: '???',
-        rating: '* * * * *',
-        comidas: [
-            { id: 3, nombre: 'Empanada' },
-            { id: 4, nombre: 'Tacos' }
-        ],
-    },
-];
-
-const todasLasComidas = tiendas.flatMap(tienda => tienda.comidas);
 
 function Principal({ cambiarPantalla }) {
+
+    const [ stores, setStores ] = useState([]);
+
+    const StoresByCity = async () => {
+    try {
+        const profile = await getProfile(localStorage.getItem('profile'));
+        const stores = await storeByCity(profile.address.split(' ')[0].toLowerCase());
+        setStores(stores);
+        return stores.flatMap(tienda => tienda.productsList || []);
+    } catch (e) {
+        console.error('Error al obtener tiendas:', e.message);
+        return [];
+    }
+    };
+
+    const todasLasComidas = StoresByCity();
 
     const [tiendaSeleccionada, setTiendaSeleccionada] = useState(null);
     const [comidaSeleccionada, setComidaSeleccionada] = useState(null);
@@ -41,7 +35,7 @@ function Principal({ cambiarPantalla }) {
     const seleccionarComida = (comida) => {
         setComidaSeleccionada(comida);
         if (!tiendaSeleccionada) {
-            const tienda = tiendas.find(t => t.comidas.includes(comida));
+            const tienda = stores.find(t => t.comidas.includes(comida));
             if (tienda) {
                 setTiendaSeleccionada(tienda);
             }
@@ -87,8 +81,8 @@ function Principal({ cambiarPantalla }) {
                 <div className="sub-contenido">
                     {/* Parte Izquierda: Tiendas */}
                     <div className="contenido-izquierdo">
-                        <div style={{ display: 'flex', flexDirection: 'column'}}>
-                            {tiendas.map((tienda) => (
+                        <div style={{ display: 'flex', flexDirection: 'column'}}>          
+                            {stores.map((tienda) => (
                                 <ContenedorItems key={tienda.id} item={tienda} onClick={seleccionarTienda} />
                             ))}
                         </div>

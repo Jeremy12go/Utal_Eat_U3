@@ -1,4 +1,4 @@
-import './comidas.css'
+import '../styles/comidas.css'
 
 function ContenedorComida({ item, onClick }) {
     if (!item) return null;
