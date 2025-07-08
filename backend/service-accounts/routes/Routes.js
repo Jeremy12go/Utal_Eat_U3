@@ -3,7 +3,7 @@ const router = express.Router();
 const controllerAccount = require('../controllers/AccountController');
 const controllerProfile = require('../controllers/ProfileController');
 
-router.get('/:email/profile', controllerAccount.getProfileByEmail);
+router.post('/login', controllerAccount.login);
 router.post('/', controllerAccount.create);
 router.delete('/:email', controllerAccount.remove);
 

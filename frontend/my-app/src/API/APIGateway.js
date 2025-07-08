@@ -5,7 +5,8 @@ const API_URL = 'http://localhost:3004'
 export const registerAccount = (email, password, name, phoneNumber, address) => axios
     .post(`${API_URL}/accounts`, { email, password, name, phoneNumber, address });
 
-export const loginAccount = (email, password) => axios.get(`${API_URL}/accounts/${email}/profile`);
+export const loginAccount = (email, password) => axios.post(`${API_URL}/accounts/login`,
+     { email, password });
 
 // Service-Order
 export const ordersByProfile = (idProfile) => axios.get(`${API_URL}/orders/${idProfile}`);

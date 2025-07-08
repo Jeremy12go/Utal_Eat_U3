@@ -15,6 +15,7 @@ function Registro({ cambiarPantalla }) {
     try {
         const res = await registerAccount(email, password, name, phoneNumber, address);
         console.log('Cuenta creada:', res.data);
+        cambiarPantalla("inicio");
     } catch (e) {
         console.error('Error al registrar:', e.response?.data || e.message);
     }
@@ -76,10 +77,7 @@ function Registro({ cambiarPantalla }) {
                 </div>
                 <div style={{marginTop: '20px', marginBottom: '20px'}}>
                     <button
-                        onClick={() => {
-                            handleSubmit();
-                            cambiarPantalla("inicio");
-                        }}
+                        onClick={ handleSubmit }
                         className="boton-iniciar">
                         Registrar
                     </button>

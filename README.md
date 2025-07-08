@@ -70,7 +70,7 @@ Cada servicio debe instalar y iniciarse independientemente.
 ```
 - En la ruta del servicio gateway
 ```bash
-    npm install express dotenv
+    npm install express dotenv cors
 ```
 * Las bases se crean automaticamente, pero no tienen datos xD
 LOS DATOS VIENEN EN EL DLC

@@ -1,17 +1,19 @@
-import '../styles/App.css';
+import '../styles/login.css';
 import { useState } from "react";
-import Registro from "../pages/Registro.js";
-import Principal from "./Principal";
-import Contenedor from "../components/Contenedor";
+import Registro from "./Registro.js";
+import Principal from "./Principal.js";
+import Contenedor from "../components/Contenedor.js";
 import PedidosDemo from "../components/PedidosDemo.js";
-import { loginAccount } from '../API/APIGateway';
+import { loginAccount } from '../API/APIGateway.js';
 
 function App() {
 
     const [pantallaActual, setPantallaActual] = useState("inicio");
     const [errorLogin, setErrorLogin] = useState(false);
+
     const [ email , setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+
     const cambiarPantalla = (nuevaPantalla) => {
         if (nuevaPantalla === 'inicio'){
             setErrorLogin(false);
@@ -21,20 +23,17 @@ function App() {
         setPantallaActual(nuevaPantalla);
     }
 
-    const validarLogin = (email, password) => {
-        //return email === "admin@utal.cl" && password === "1234";
-        return email === "" && password === "";
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await loginAccount(email, password);
+            localStorage.setItem('profile', res.data);
+            console.log('Login en el perfil:', res.data);
+            cambiarPantalla("Principal");
+        } catch (e) {
+            console.error('Error al registrar:', e.response?.data || e.message);
+        }
     };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await loginAccount(email, password);
-      console.log('Cuenta creada:', res.data);
-    } catch (e) {
-      console.error('Error al registrar:', e.response?.data || e.message);
-    }
-  };
 
     return (
         <div className="App">
@@ -91,18 +90,7 @@ function App() {
                                 </div>
                             </div>
                             <div style={{height: '45px' ,marginTop: '20px', marginBottom: '20px'}}>
-                                <button
-                                    onClick={() => {
-                                        if (validarLogin(email, password)) {
-                                            handleSubmit();
-                                            cambiarPantalla("Principal");
-                                            setErrorLogin(false);
-                                        } else {
-                                            setErrorLogin(true);
-                                        }
-                                    }}
-                                    className="boton-iniciar"
-                                >
+                                <button onClick={handleSubmit} className="boton-iniciar" >
                                     Iniciar Sesión
                                 </button>
                                 {errorLogin && (
