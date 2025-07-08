@@ -8,7 +8,7 @@ export const registerAccount = (email, password, name, phoneNumber, address) => 
 export const loginAccount = (email, password) => axios.post(`${API_URL}/accounts/login`,
      { email, password });
 
-export const getProfile = (idProfie) => axios.get(`${API_URL}/accounts/profile/${idProfie}`);
+export const getProfile = (idProfile) => axios.get(`${API_URL}/accounts/profile/${idProfile}`);
 
 // Service-Order
 export const ordersByProfile = (idProfile) => axios.get(`${API_URL}/orders/${idProfile}`);

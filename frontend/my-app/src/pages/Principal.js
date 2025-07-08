@@ -4,21 +4,28 @@ import ContenedorComida from "../components/ContenedorComida";
 import { storeByCity } from '../API/APIGateway.js';
 import { getProfile } from '../API/APIGateway.js';
 
+function arrayBufferToBase64(buffer) {
+  return btoa(
+    new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+  );
+}
 
 function Principal({ cambiarPantalla }) {
 
     const [ stores, setStores ] = useState([]);
 
     const StoresByCity = async () => {
-    try {
-        const profile = await getProfile(localStorage.getItem('profile'));
-        const stores = await storeByCity(profile.address.split(' ')[0].toLowerCase());
-        setStores(stores);
-        return stores.flatMap(tienda => tienda.productsList || []);
-    } catch (e) {
-        console.error('Error al obtener tiendas:', e.message);
-        return [];
-    }
+        try {
+            const idProfile = localStorage.getItem('idProfile');
+            const profile = await getProfile(idProfile);
+            const city = profile.data.address.split(' ')[0].toLowerCase()
+            const stores = await storeByCity(city);
+            setStores(stores.data);
+            return stores.data;
+        } catch (e) {
+            console.error('Error al obtener tiendas:', e.message);
+            return [];
+        }
     };
 
     const todasLasComidas = StoresByCity();
@@ -83,7 +90,13 @@ function Principal({ cambiarPantalla }) {
                     <div className="contenido-izquierdo">
                         <div style={{ display: 'flex', flexDirection: 'column'}}>          
                             {stores.map((tienda) => (
-                                <ContenedorItems key={tienda.id} item={tienda} onClick={seleccionarTienda} />
+                               <ContenedorItems
+                                    key={tienda.id}
+                                    item={{
+                                        ...tienda,
+                                        logo: `data:${tienda.logo.contentType};base64,${arrayBufferToBase64(tienda.logo.data.data)}`
+                                    }}
+                                    onClick={() => seleccionarTienda(tienda)} />
                             ))}
                         </div>
                     </div>
