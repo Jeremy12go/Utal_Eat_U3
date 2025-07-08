@@ -1,4 +1,4 @@
-import './Items.css'
+import '../styles/Items.css'
 
 function ContenedorItems({ item, onClick }) {
     if (!item) return null;

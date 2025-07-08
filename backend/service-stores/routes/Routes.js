@@ -37,7 +37,6 @@ router.post('/', uploadStore.single('logo'), async (req, res) => {
 });
 
 // endpoints para Product.
-router.get('/product', ProductController.getAll);
 router.get('/product/:idStore', ProductController.getByIdStore);
 router.get('/product/:id/image', ProductController.getImage);
 router.put('/product/:id', ProductController.update);

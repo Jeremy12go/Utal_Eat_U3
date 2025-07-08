@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import ContenedorItems from "./ContenedorItems";
-import ContenedorComida from "./ContenedorComida";
+import ContenedorItems from "../components/ContenedorItems";
+import ContenedorComida from "../components/ContenedorComida";
 
 const tiendas = [
     {

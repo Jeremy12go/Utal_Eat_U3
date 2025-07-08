@@ -1,10 +1,10 @@
-import './App.css';
+import '../styles/App.css';
 import { useState } from "react";
-import Registro from "./Registro";
+import Registro from "../pages/Registro.js";
 import Principal from "./Principal";
-import Contenedor from "./Contenedor";
-import PedidosDemo from "./Componentes/PedidosDemo";
-import { loginAccount } from './API/APIGateway';
+import Contenedor from "../components/Contenedor";
+import PedidosDemo from "../components/PedidosDemo.js";
+import { loginAccount } from '../API/APIGateway';
 
 function App() {
 

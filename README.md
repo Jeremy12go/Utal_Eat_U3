@@ -51,6 +51,7 @@ Antes de ejecutar la aplicación, se debe tener instalado:
 ### `cd frontend/my-app`
 Cambiamos el directorio
 ### `npm install`
+`npm install axios`
 Instalamos las dependencias
 ### `npm start`
 Iniciamos la aplicación

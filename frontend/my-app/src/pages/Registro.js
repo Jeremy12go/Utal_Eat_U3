@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Contenedor from "./Contenedor";
-import { registerAccount } from './API/APIGateway';
+import Contenedor from "../components/Contenedor.js";
+import { registerAccount } from '../API/APIGateway';
 
 function Registro({ cambiarPantalla }) {
 
