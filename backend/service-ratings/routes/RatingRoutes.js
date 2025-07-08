@@ -22,6 +22,5 @@ router.get('/stores/:idStore', async (req, res) => {
     }
 });
 router.get('/store/:idStore/detalles', controller.getRatingsByStoreId);
-module.exports = router;
 
 module.exports = router;
