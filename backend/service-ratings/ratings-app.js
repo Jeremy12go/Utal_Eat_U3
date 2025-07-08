@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 
 const app = express();
+app.use(express.urlencoded({ extended: true })); //para que pueda leer peticiones con campos tipo form-data (postman)
 app.use(express.json()); 
 
 const { mongoConnect } = require('./db/database');
