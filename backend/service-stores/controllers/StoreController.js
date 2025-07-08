@@ -2,8 +2,10 @@ const Store = require('../models/Store');
 
 exports.getByCity = async (req, res) => {
   try {
+    const city = req.params.city.toLowerCase();
+
     const stores = await Store.find({
-      city: { $regex: new RegExp(req.params.city, 'i') }
+      city: city
     });
     if (stores.length === 0) {
       return res.status(404).json({ error: 'Tienda no encontrada' });
