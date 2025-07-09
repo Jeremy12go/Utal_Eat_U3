@@ -37,6 +37,7 @@ function Pedido({ volver, pedido }) {
           }
         })
       );
+      console.log("Productos obtenidos:", productosTemp);
       setProductos(productosTemp);
 
       // 3. Obtener tienda
@@ -62,18 +63,6 @@ function Pedido({ volver, pedido }) {
       </div>
     );
   }
-/*
-  if (!pedido || !pedido.items) {
-    return (
-      <div className="pedido-container">
-        <h3>No se encontró el pedido.</h3>
-        <button onClick={volver} className="pedido-btn-volver">Volver</button>
-      </div>
-    );
-  }
-
-  const items = pedido.items;
-  const total = items.reduce((acc, item) => acc + item.precio * item.cantidad, 0);*/
 
   return (
     <div className="pedido-container">

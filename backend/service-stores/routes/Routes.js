@@ -7,9 +7,9 @@ const Product = require('../models/Product');
 const ProductController = require('../controllers/ProductController');
 
 // endpoints para Product.
-router.get('/product/:idStore', ProductController.getByIdStore);
+router.get('/product/id/:id', ProductController.getById);
+router.get('/product/store/:idStore', ProductController.getByIdStore);
 router.get('/product/:id/image', ProductController.getImage);
-router.get('/product/:id', ProductController.getById);
 router.put('/product/:id', ProductController.update);
 router.delete('/product/:id', ProductController.remove);
 

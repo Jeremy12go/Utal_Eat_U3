@@ -30,9 +30,9 @@ export const getStoreById = (id) => axios.get(`${API_URL}/stores/${id}`);
 
 export const getLogoStore = (id) => axios.get(`${API_URL}/stores/${id}`);
 
-export const getProductById = (id) => axios.get(`${API_URL}/stores/product/${id}`);
+export const getProductById = (id) => axios.get(`${API_URL}/stores/product/id/${id}`);
 
-export const getProductsByStore = (id) => axios.get(`${API_URL}/stores/product/${id}`);
+export const getProductsByStore = (idStore) => axios.get(`${API_URL}/stores/product/store/${idStore}`);
 
 export const getImageProduct = (id) => axios.get(`${API_URL}/stores/product/${id}/image`);
 
