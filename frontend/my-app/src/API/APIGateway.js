@@ -8,7 +8,7 @@ export const registerAccount = (email, password, name, phoneNumber, address) => 
 export const loginAccount = (email, password) => axios.post(`${API_URL}/accounts/login`,
      { email, password });
 
-export const getProfile = (idProfie) => axios.get(`${API_URL}/accounts/profile/${idProfie}`);
+export const getProfile = (idProfile) => axios.get(`${API_URL}/accounts/profile/${idProfile}`);
 
 // Service-Order
 export const ordersByProfile = (idProfile) => axios.get(`${API_URL}/orders/${idProfile}`);
@@ -24,9 +24,9 @@ export const storeByCity = (city) => axios.get(`${API_URL}/stores/${city}`);
 
 export const getLogoStore = (id) => axios.get(`${API_URL}/stores/${id}`);
 
-export const getProductsByStore = (id) => axios.get(`${API_URL}/stores/products/${id}`);
+export const getProductsByStore = (id) => axios.get(`${API_URL}/stores/product/${id}`);
 
-export const getImageProduct = (id) => axios.get(`${API_URL}/stores/products/${id}/image`);
+export const getImageProduct = (id) => axios.get(`${API_URL}/stores/product/${id}/image`);
 
 // Services-Ranking
 export const getRatingsByStore = (id) => axios.get(`${API_URL}/ratings/stores/${id}`);

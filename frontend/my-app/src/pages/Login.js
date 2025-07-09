@@ -27,8 +27,9 @@ function App() {
         e.preventDefault();
         try {
             const res = await loginAccount(email, password);
-            localStorage.setItem('profile', res.data);
-            console.log('Login en el perfil:', res.data);
+            localStorage.setItem('idProfile', res.data);
+            const p = localStorage.getItem('idProfile');
+            console.log('Login en el perfil:', p);
             cambiarPantalla("Principal");
         } catch (e) {
             console.error('Error al registrar:', e.response?.data || e.message);
@@ -38,7 +39,10 @@ function App() {
     return (
         <div className="App">
             {pantallaActual === "PedidosDemo" ? (
-                <PedidosDemo volverAlInicio={() => setPantallaActual("original")} />
+                <PedidosDemo
+                volverAPrincipal={() => setPantallaActual("Principal")}
+                volverALogin={() => setPantallaActual("inicio")}
+                />
             ) : (
             <header className="Contenedor">
                 {pantallaActual === "inicio" ? (
