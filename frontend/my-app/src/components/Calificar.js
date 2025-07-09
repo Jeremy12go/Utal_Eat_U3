@@ -9,18 +9,7 @@ function Calificar({ volver }) {
 
   const handleEnviar = async () => {
     setEnviando(true);
-    /* la IA me dijo q hacia seria la conexion al backend despues, yo ni idea xd
-    await fetch("http://localhost:3001/calificaciones", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        tiendaId: "id_tienda_ejemplo",
-        estrellas,
-        comentario,
-        usuario: "usuario_ejemplo"
-      })
-    });
-    */
+
     setTimeout(() => {
       setEnviando(false);
       setEnviado(true);

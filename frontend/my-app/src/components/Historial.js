@@ -1,98 +1,64 @@
 import React, { useState, useEffect } from "react";
 import "./Historial.css";
+import { getProfile, getOrdersByIds, getStoreById } from '../API/APIGateway';
+import { arrayBufferToBase64 } from '../base64';
 
-// EJEMPLOS PARA TESTEO
-const pedidosEjemplo = [
-  {
-    id: 1,
-    tienda: {
-      nombre: "Comidas UTAL",
-      logo: "https://cdn-icons-png.flaticon.com/512/3075/3075977.png",
-    },
-    fecha: "2025-07-01T13:45:00Z",
-    total: 15000,
-    items: [
-      {
-        id: 1,
-        nombre: "Hamburguesa Clásica",
-        imagen: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=100&q=80",
-        precio: 4500,
-        cantidad: 2,
-      },
-      {
-        id: 2,
-        nombre: "Pizza Margarita",
-        imagen: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=100&q=80",
-        precio: 6000,
-        cantidad: 1,
-      },
-    ],
-  },
-  {
-    id: 2,
-    tienda: {
-      nombre: "Sushi Express",
-      logo: "https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
-    },
-    fecha: "2025-06-28T19:20:00Z",
-    total: 8500,
-    items: [
-      {
-        id: 3,
-        nombre: "Sushi Roll",
-        imagen: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=100&q=80",
-        precio: 4250,
-        cantidad: 2,
-      },
-    ],
-  },
-  {
-    id: 3,
-    tienda: {
-      nombre: "Pizzería Central",
-      logo: "https://cdn-icons-png.flaticon.com/512/3132/3132693.png",
-    },
-    fecha: "2025-06-15T21:10:00Z",
-    total: 6000,
-    items: [
-      {
-        id: 4,
-        nombre: "Pizza Napolitana",
-        imagen: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=100&q=80",
-        precio: 6000,
-        cantidad: 1,
-      },
-    ],
-  },
-];
-
-function formatearFecha(fechaFormat) { //dd-mm-yy
+function formatearFecha(fechaFormat) {
   const fecha = new Date(fechaFormat);
   const dia = String(fecha.getDate()).padStart(2, '0');
   const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-  const anio = String(fecha.getFullYear()).slice(-2);
+  const year = String(fecha.getFullYear()).slice(-2);
   const hora = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  return `${dia}-${mes}-${anio} ${hora}`;
+  return `${dia}-${mes}-${year} ${hora}`;
 }
 
 function Historial({ volver, verPedido }) {
   const [pedidos, setPedidos] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [tiendas, setTiendas] = useState({});
 
   useEffect(() => {
-    /* la IA me dijo q hacia seria la conexion al backend despues, yo ni idea xd
-    fetch("http://localhost:3001/pedidos?usuario=usuario_ejemplo")
-      .then(res => res.json())
-      .then(data => {
-        setPedidos(data);
-        setCargando(false);
-      });
-    */
-    // Simulación:
-    setTimeout(() => {
-      setPedidos(pedidosEjemplo);
+    const cargarPedidos = async () => {
+      setCargando(true);
+      try {
+        // 1. Obtener perfil y array de order ids
+        const idProfile = localStorage.getItem('idProfile');
+        const profileRes = await getProfile(idProfile);
+        const ordersIds = profileRes.data.orders || [];
+        if (ordersIds.length === 0) {
+          setPedidos([]);
+          setCargando(false);
+          return;
+        }
+
+        // 2. Obtener las órdenes completas
+        const ordersRes = await getOrdersByIds(ordersIds);
+        const pedidosData = ordersRes.data;
+        setPedidos(pedidosData);
+
+        // 3. Obtener tiendas individualmente usando idStore de cada order
+        const tiendasTemp = {};
+        await Promise.all(
+          pedidosData.map(async pedido => {
+            const idStore = pedido.idStore;
+            if (idStore && !tiendasTemp[idStore]) {
+              try {
+                const tiendaRes = await getStoreById(idStore);
+                tiendasTemp[idStore] = tiendaRes.data;
+              } catch (e) {
+                tiendasTemp[idStore] = null;
+              }
+            }
+          })
+        );
+        setTiendas(tiendasTemp);
+
+      } catch (e) {
+        setPedidos([]);
+      }
       setCargando(false);
-    }, 500);
+    };
+    cargarPedidos();
   }, []);
 
   return (
@@ -104,20 +70,31 @@ function Historial({ volver, verPedido }) {
         <p>No hay pedidos anteriores.</p>
       ) : (
         <div>
-          {pedidos.map(pedido => (
-            <div
-              key={pedido.id}
-              onClick={() => verPedido(pedido)}
-              className="historial-item"
-            >
-              <img src={pedido.tienda.logo} alt="logo tienda" className="historial-logo" />
-              <div className="historial-info">
-                <div className="historial-nombre">{pedido.tienda.nombre}</div>
-                <div className="historial-fecha">Fecha: {formatearFecha(pedido.fecha)}</div>
+          {pedidos.map(pedido => {
+            const tienda = pedido.idStore ? tiendas[pedido.idStore] : null;
+            return (
+              <div
+                key={pedido._id || pedido.id}
+                onClick={() => verPedido(pedido)}
+                className="historial-item"
+              >
+                <img
+                  src={
+                    tienda && tienda.logo && tienda.logo.data
+                      ? `data:${tienda.logo.contentType};base64,${arrayBufferToBase64(tienda.logo.data.data)}`
+                      : "./logo.png"
+                  }
+                  alt="logo tienda"
+                  className="historial-logo"
+                />
+                <div className="historial-info">
+                  <div className="historial-nombre">{tienda ? tienda.name : "Tienda desconocida"}</div>
+                  <div className="historial-fecha">Fecha: {formatearFecha(pedido.orderDate || pedido.fecha)}</div>
+                </div>
+                <div className="historial-total">${pedido.totalPrice || pedido.total}</div>
               </div>
-              <div className="historial-total">${pedido.total}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
       <button onClick={volver} className="historial-btn-volver">Volver</button>

@@ -5,6 +5,7 @@ import { storeByCity } from '../API/APIGateway.js';
 import { getProfile } from '../API/APIGateway.js';
 import { getProductsByStore } from '../API/APIGateway.js';
 import { getRatingsByStore } from '../API/APIGateway.js';
+import { arrayBufferToBase64 } from '../base64.js';
 
 import Carrito from "../components/Carrito";
 import Historial from "../components/Historial";
@@ -18,12 +19,6 @@ import ajustesImg from '../assets/ajustes.png';
 import logoutImg from '../assets/log-out.png';
 import lupaImg from '../assets/lupa.png';
 import usuarioImg from '../assets/usuario.png';
-
-function arrayBufferToBase64(buffer) {
-  return btoa(
-    new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
-  );
-}
 
 function Principal({ cambiarPantalla }) {
 
@@ -85,13 +80,14 @@ function Principal({ cambiarPantalla }) {
     const [productosTienda, setProductosTienda] = useState([]);
 
     const seleccionarTienda = async (tienda) => {
-        setTiendaSeleccionada(tienda);
         if (
             carrito.length > 0 &&
             carrito[0].idStore !== tienda.id
         ) {
-            setCarrito([]); // Limpia el carrito
+            setCarrito([]); // Limpia el carrito si hay items de una tienda y se selecciona otra
         }
+        setTiendaSeleccionada(tienda);
+        
         try {
             const res = await getProductsByStore(tienda.id);
             console.log("Productos recibidos:", res.data);
@@ -105,39 +101,24 @@ function Principal({ cambiarPantalla }) {
 
     const agregarACarrito = (producto) => {
         setCarrito(prev => {
-            // Si el carrito está vacío o es de la misma tienda, agrega normalmente
-            if (prev.length === 0 || prev[0].idTienda === producto.idStore) {
-                const existe = prev.find(item => item.id === producto.id);
-                if (existe) {
-                    return prev.map(item =>
-                        item.id === producto.id
-                            ? { ...item, cantidad: item.cantidad + 1 }
-                            : item
-                    );
-                }
-                return [...prev, { 
-                    id: producto.id,
-                    nombre: producto.name,
-                    imagen: producto.image
-                        ? `data:${producto.image.contentType};base64,${arrayBufferToBase64(producto.image.data.data)}`
-                        : "./logo.png",
-                    precio: producto.price,
-                    cantidad: 1,
-                    idTienda: producto.idStore // <-- Guarda el id de la tienda
-                }];
-            } else {
-                // Si es de otra tienda, resetea el carrito y agrega solo el nuevo producto
-                return [{
-                    id: producto.id,
-                    nombre: producto.name,
-                    imagen: producto.image
-                        ? `data:${producto.image.contentType};base64,${arrayBufferToBase64(producto.image.data.data)}`
-                        : "./logo.png",
-                    precio: producto.price,
-                    cantidad: 1,
-                    idTienda: producto.idStore // <-- Guarda el id de la tienda
-                }];
+            const existe = prev.find(item => item.id === producto.id);
+            if (existe) {
+                return prev.map(item =>
+                    item.id === producto.id
+                        ? { ...item, cantidad: item.cantidad + 1 }
+                        : item
+                );
             }
+            return [...prev, { 
+                id: producto.id,
+                nombre: producto.name,
+                imagen: producto.image
+                    ? `data:${producto.image.contentType};base64,${arrayBufferToBase64(producto.image.data.data)}`
+                    : "./logo.png",
+                precio: producto.price,
+                cantidad: 1,
+                idStore: producto.idStore 
+            }];
         });
     };
 
@@ -170,6 +151,11 @@ function Principal({ cambiarPantalla }) {
     }
     if(pantalla === "calificacion") {
         return <Calificar volver={() => setPantalla("principal")} />
+    }
+    if(pantalla === "detallesPedido" && pedidoSeleccionado) {
+        return <Pedido 
+        pedido={pedidoSeleccionado}
+        volver={() => setPantalla("historial")} />
     }
 
     return (

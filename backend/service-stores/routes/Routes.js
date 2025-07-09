@@ -6,6 +6,7 @@ const StoreController = require('../controllers/StoreController');
 const Product = require('../models/Product');
 const ProductController = require('../controllers/ProductController');
 
+router.get('/:id', StoreController.getById);
 router.get('/:city', StoreController.getByCity);
 router.get('/:id/logo', StoreController.getLogo);
 router.put('/:id', StoreController.update);
@@ -39,6 +40,7 @@ router.post('/', uploadStore.single('logo'), async (req, res) => {
 // endpoints para Product.
 router.get('/product/:idStore', ProductController.getByIdStore);
 router.get('/product/:id/image', ProductController.getImage);
+router.get('/product/:id', ProductController.getById);
 router.put('/product/:id', ProductController.update);
 router.delete('/product/:id', ProductController.remove);
 

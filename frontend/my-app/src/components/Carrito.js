@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Carrito.css";
-import { createOrder } from '../API/APIGateway.js';
+import { createOrder, getProfile, updateProfile } from '../API/APIGateway.js';
 
 
 function Carrito({ infoTienda, carrito, setCarrito, volver, irAConfirmacion, logoTienda }) {
@@ -33,7 +33,14 @@ function Carrito({ infoTienda, carrito, setCarrito, volver, irAConfirmacion, log
     const idProfile = localStorage.getItem('idProfile');
     const ids = carrito.flatMap(item => Array(item.cantidad).fill(item.id));
     try {
-      const res = await createOrder(idProfile, ids);
+      const res = await createOrder(idProfile, ids, total, infoTienda.id);
+      const orderId = res.data.id;
+
+      const profileRes = await getProfile(idProfile);
+      const orders = profileRes.data.orders || [];
+
+      await updateProfile(idProfile, { orders: [...orders, orderId] });
+
       setEnviando(false);
       setCarrito([]);
       irAConfirmacion();

@@ -7,7 +7,9 @@ const orderSchema = new mongoose.Schema({
   //state: { type: String, emun: STATE}, 
   productList: [ { type: String } ],
   idProfile: { type: String, required: true} ,
-  orderDate: { type: Date, required: true} //nelson-
+  idStore: { type: String, required: true},
+  orderDate: { type: Date, required: true}, //nelson-
+  totalPrice: {type: Number, required: true}
 });
 
 module.exports = mongoose.models.Order || mongoose.model('Order', orderSchema);
