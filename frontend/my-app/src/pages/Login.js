@@ -27,12 +27,18 @@ function App() {
         e.preventDefault();
         try {
             const res = await loginAccount(email, password);
+            setErrorLogin('');
             localStorage.setItem('idProfile', res.data);
             const p = localStorage.getItem('idProfile');
-            console.log('Login en el perfil:', p);
+            console.log('Login en el perfil:', res.data);
             cambiarPantalla("Principal");
         } catch (e) {
-            console.error('Error al registrar:', e.response?.data || e.message);
+            if (e.response && e.response.data && e.response.data.error){
+                setErrorLogin(e.response.data.error);
+                console.error('Error al registrar:', e.response?.data || e.message);
+            } else{
+                console.error('Error al registrar:', e.response?.data || e.message);
+            }
         }
     };
 
@@ -96,7 +102,7 @@ function App() {
                                 </button>
                                 {errorLogin && (
                                     <p style={{ color: 'red', marginTop: '10px' }}>
-                                        Credenciales incorrectas.
+                                        {errorLogin}
                                     </p>
                                 )}
                             </div>

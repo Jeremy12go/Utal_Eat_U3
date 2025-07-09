@@ -9,9 +9,14 @@ function Registro({ cambiarPantalla }) {
     const [ name, setName ] = useState('');
     const [ phoneNumber, setPhoneNumber ] = useState('');
     const [ address, setAddress ] = useState('');
+    const [errorRegistro, setErrorRegistro] = useState(false);
 
     const handleSubmit = async (e) => {
     e.preventDefault();
+        if (!email.trim() || !password.trim() || !name.trim() || !phoneNumber.trim() || !address.trim()) {
+            setErrorRegistro("Debes completar todos los campos.");
+            return;
+        }
     try {
         const res = await registerAccount(email, password, name, phoneNumber, address);
         console.log('Cuenta creada:', res.data);
@@ -81,6 +86,20 @@ function Registro({ cambiarPantalla }) {
                         className="boton-iniciar">
                         Registrar
                     </button>
+                    {errorRegistro && (
+                        <p style={{
+                            color: 'red',
+                            textAlign: 'center',
+                            position: 'absolute',
+                            left: '50%',           // Mueve el inicio del elemento al 50% del contenedor
+                            transform: 'translateX(-50%)',  // Retrocede el 50% del ancho del propio elemento
+                            marginTop: '10px',
+                            width: '100%',         // Asegura que el texto no se corte
+                            visibility: errorRegistro ? 'visible' : 'hidden'
+                        }}>
+                            {errorRegistro || ''}
+                        </p>
+                    )}
                 </div>
             </Contenedor>
         </div>

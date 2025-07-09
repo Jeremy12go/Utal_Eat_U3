@@ -2,7 +2,11 @@ import React, {useState} from 'react';
 import ContenedorItems from "../components/ContenedorItems";
 import ContenedorComida from "../components/ContenedorComida";
 import { storeByCity } from '../API/APIGateway.js';
-import { getProfile } from '../API/APIGateway.js';
+import { getProfile, getCompleteProfile } from '../API/APIGateway.js';
+import carritoImg from '../assets/carrito.png'
+import historialImg from '../assets/historial.png'
+import lupaImg from '../assets/lupa.png'
+import usuarioImg from '../assets/usuario.png'
 
 function arrayBufferToBase64(buffer) {
   return btoa(
@@ -18,9 +22,11 @@ function Principal({ cambiarPantalla }) {
         try {
             const idProfile = localStorage.getItem('idProfile');
             const profile = await getProfile(idProfile);
+            setPerfil(profile.data);
             const city = profile.data.address.split(' ')[0].toLowerCase()
             const stores = await storeByCity(city);
             setStores(stores.data);
+            console.log("xx",profile.data.name);
             return stores.data;
         } catch (e) {
             console.error('Error al obtener tiendas:', e.message);
@@ -32,6 +38,8 @@ function Principal({ cambiarPantalla }) {
 
     const [tiendaSeleccionada, setTiendaSeleccionada] = useState(null);
     const [comidaSeleccionada, setComidaSeleccionada] = useState(null);
+    const [user, setUser] = useState(false);
+    const [perfil, setPerfil] = useState(null);
 
     const seleccionarTienda = (tienda) => {
         setTiendaSeleccionada(tienda);
@@ -57,33 +65,61 @@ function Principal({ cambiarPantalla }) {
                 {/*MENU LATERAL*/}
                 <button className="logo-box">Utal Eats</button>
                 <button className="menu-boton">
-                    <img src="/carrito.png" alt="Carrito" className="icons" />
+                    <img src={carritoImg} alt="Carrito" className="icons" />
                     Carrito
                 </button>
                 <button className="menu-boton">
-                    <img src="/historial.png" alt="Historial" className="icons" />
+                    <img src={historialImg} alt="Historial" className="icons" />
                     Historial
-                </button>
-                <button className="menu-boton">
-                    <img src="/ajustes.png" alt="ajustes" className="icons" />
-                    Ajustes
-                </button>
-                <button className="menu-boton"
-                        onClick={() => cambiarPantalla("inicio")}
-                >
-                    <img src="/log-out.png" alt="log-out" className="icons-special" />
-                    Log Out
                 </button>
             </div>
             <div className="contenido-principal">
                 <div className="barra-lateral">
                     <div className="input-container">
-                        <img src="/lupa.png" alt="buscar" className="lupa-icono" />
+                        <img src={lupaImg} alt="buscar" className="lupa-icono" />
                         <input type="text" placeholder="Buscar productos/tiendas" className="buscador" />
                     </div>
-                    <button className="boton-perfil">
-                        <img src="/usuario.png" alt="Perfil" className="img-perfil" />
+                    <button className="boton-perfil"
+                            onClick={() => setUser(!user)}
+                            style={{ position: 'relative', zIndex: 10 }}
+                    >
+                        <img src={usuarioImg} alt="Perfil" className="img-perfil" />
                     </button>
+                    {user && (
+                        <div className="profile-sidebar-overlay">
+                            <div className="profile-sidebar">
+                                {/* Encabezado del panel */}
+                                <div className="sidebar-header">
+                                    <h2>Mi Perfil</h2>
+                                    <button
+                                        onClick={() => setUser(false)}
+                                        className="close-button"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                <div className="sidebar-content">
+                                    <div className="profile-info">
+                                        <img
+                                            src={usuarioImg}
+                                            alt="Foto de perfil"
+                                            className="profile-picture"
+                                        />
+                                        <p><strong>Perfil:</strong> {perfil?.id || 'Cargando...'} </p>
+                                        <p><strong>Nombre:</strong> {perfil?.name || 'Cargando...'} </p>
+                                        <p><strong>Teléfono:</strong> {perfil?.phoneNumber || 'Cargando...'} </p>
+                                        <p><strong>Dirección:</strong> {perfil?.address || 'Cargando...'} </p>
+                                    </div>
+                                    <button
+                                        className="logout-btn"
+                                        onClick={() => cambiarPantalla("inicio")}
+                                    >
+                                        Cerrar sesión
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className="sub-contenido">
                     {/* Parte Izquierda: Tiendas */}
