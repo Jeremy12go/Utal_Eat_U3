@@ -18,6 +18,7 @@ import historialImg from '../assets/historial.png';
 import lupaImg from '../assets/lupa.png';
 import usuarioImg from '../assets/usuario.png';
 
+
 function Principal({ cambiarPantalla }) {
 
     const [carrito, setCarrito] = useState([]);

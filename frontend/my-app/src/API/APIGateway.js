@@ -12,6 +12,7 @@ export const getProfile = (idProfile) => axios.get(`${API_URL}/accounts/profile/
 
 export const updateProfile = (idProfile, data) => axios.put(`${API_URL}/accounts/profile/${idProfile}`, data);
 
+
 // Service-Order
 export const getOrdersByIds = (ids) => axios.post(`${API_URL}/orders/byIds`, { ids });
 

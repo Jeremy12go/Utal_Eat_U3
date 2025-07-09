@@ -25,6 +25,7 @@ exports.getByIdStore = async (req, res) => {
   }
 };
 
+//Cambios aqui
 exports.create = async (req, res) => {
   try {
     const numRating = await Rating.countDocuments();
