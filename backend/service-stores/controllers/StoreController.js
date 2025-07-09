@@ -1,15 +1,5 @@
 const Store = require('../models/Store');
 
-exports.getById = async (req, res) => {
-  try {
-    const store = await Store.findOne({ id: req.params.id });
-    if (!store) return res.status(404).json({ error: 'Tienda no encontrada' });
-    res.json(store);
-  } catch (e) {
-    res.status(500).json({ error: 'Error al obtener la tienda', detalle: e.message });
-  }
-};
-
 exports.getByCity = async (req, res) => {
   try {
     const stores = await Store.find({
@@ -21,6 +11,16 @@ exports.getByCity = async (req, res) => {
     res.json(stores);
   } catch(e){
     res.status(500).json({error: 'Error al obtener tienda', detalle: e.message });
+  }
+};
+
+exports.getById = async (req, res) => {
+  try {
+    const store = await Store.findOne({ id: req.params.id });
+    if (!store) return res.status(404).json({ error: 'Tienda no encontrada' });
+    res.json(store);
+  } catch (e) {
+    res.status(500).json({ error: 'Error al obtener la tienda', detalle: e.message });
   }
 };
 

@@ -24,9 +24,9 @@ export const changeStateOrder = (id, state) => axios.put(`${API_URL}/orders/${id
 export const addProductOrder = (id, product) => axios.put(`${API_URL}/orders/${id}`, product);
 
 // Service-Store
-export const getStoreById = (id) => axios.get(`${API_URL}/stores/${id}`);
+export const storeByCity = (city) => axios.get(`${API_URL}/stores/city/${city}`);
 
-export const storeByCity = (city) => axios.get(`${API_URL}/stores/${city}`);
+export const getStoreById = (id) => axios.get(`${API_URL}/stores/${id}`);
 
 export const getLogoStore = (id) => axios.get(`${API_URL}/stores/${id}`);
 

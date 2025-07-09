@@ -43,8 +43,10 @@ function Principal({ cambiarPantalla }) {
             try {
                 const idProfile = localStorage.getItem('idProfile');
                 const profile = await getProfile(idProfile);
+                setPerfil(profile.data);
                 const city = profile.data.address.split(' ')[0].toLowerCase()
                 const stores_ = await storeByCity(city);
+                console.log("xx",profile.data.name);
 
                 const storesWithRating = await Promise.all(
                 stores_.data.map(async tienda => {
@@ -78,6 +80,8 @@ function Principal({ cambiarPantalla }) {
 
     const [tiendaSeleccionada, setTiendaSeleccionada] = useState(null);
     const [productosTienda, setProductosTienda] = useState([]);
+    const [user, setUser] = useState(false);
+    const [perfil, setPerfil] = useState(null);
 
     const seleccionarTienda = async (tienda) => {
         if (
@@ -193,16 +197,6 @@ function Principal({ cambiarPantalla }) {
                     <img src={historialImg} alt="Historial" className="icons" />
                     Historial
                 </button>
-                <button className="menu-boton">
-                    <img src={ajustesImg} alt="ajustes" className="icons" />
-                    Ajustes
-                </button>
-                <button className="menu-boton"
-                        onClick={() => cambiarPantalla("inicio")}
-                >
-                    <img src={logoutImg} alt="log-out" className="icons-special" />
-                    Log Out
-                </button>
             </div>
             <div className="contenido-principal">
                 <div className="barra-lateral">
@@ -210,9 +204,47 @@ function Principal({ cambiarPantalla }) {
                         <img src={lupaImg} alt="buscar" className="lupa-icono" />
                         <input type="text" placeholder="Buscar productos/tiendas" className="buscador" />
                     </div>
-                    <button className="boton-perfil">
+                    <button className="boton-perfil"
+                            onClick={() => setUser(!user)}
+                            style={{ position: 'relative', zIndex: 10 }}
+                    >
                         <img src={usuarioImg} alt="Perfil" className="img-perfil" />
                     </button>
+                    {user && (
+                        <div className="profile-sidebar-overlay">
+                            <div className="profile-sidebar">
+                                {/* Encabezado del panel */}
+                                <div className="sidebar-header">
+                                    <h2>Mi Perfil</h2>
+                                    <button
+                                        onClick={() => setUser(false)}
+                                        className="close-button"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                <div className="sidebar-content">
+                                    <div className="profile-info">
+                                        <img
+                                            src={usuarioImg}
+                                            alt="Foto de perfil"
+                                            className="profile-picture"
+                                        />
+                                        <p><strong>Perfil:</strong> {perfil?.id || 'Cargando...'} </p>
+                                        <p><strong>Nombre:</strong> {perfil?.name || 'Cargando...'} </p>
+                                        <p><strong>Teléfono:</strong> {perfil?.phoneNumber || 'Cargando...'} </p>
+                                        <p><strong>Dirección:</strong> {perfil?.address || 'Cargando...'} </p>
+                                    </div>
+                                    <button
+                                        className="logout-btn"
+                                        onClick={() => cambiarPantalla("inicio")}
+                                    >
+                                        Cerrar sesión
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className="sub-contenido">
                     {/* Parte Izquierda: Tiendas */}
