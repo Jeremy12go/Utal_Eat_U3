@@ -1,39 +1,9 @@
 import React, { useState } from "react";
 import "./Carrito.css";
+import { createOrder, getProfile, updateProfile } from '../API/APIGateway.js';
 
-// EJEMPLO TIENDA PARA TESTEO
-const infoTienda = {
-  nombre: "Comidas UTAL",
-  logo: "https://cdn-icons-png.flaticon.com/512/3075/3075977.png",
-  calificacion: 4.5,
-};
-// EJEMPLO CARRITO PARA TESTEO
-const platosEjemplo = [
-  {
-    id: 1,
-    nombre: "Hamburguesa Clásica",
-    imagen: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=100&q=80",
-    precio: 4500,
-    cantidad: 2,
-  },
-  {
-    id: 2,
-    nombre: "Pizza Margarita",
-    imagen: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=100&q=80",
-    precio: 6000,
-    cantidad: 1,
-  },
-  {
-    id: 3,
-    nombre: "Empanada de Queso",
-    imagen: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=100&q=80",
-    precio: 1200,
-    cantidad: 3,
-  },
-];
 
-function Carrito({ volver, irAConfirmacion }) {
-  const [carrito, setCarrito] = useState(platosEjemplo);
+function Carrito({ infoTienda, carrito, setCarrito, volver, irAConfirmacion, logoTienda, setIdTiendaACalificar, setIdOrdenACalificar }) {
   const [enviando, setEnviando] = useState(false);
 
   const sumar = (id) => { // para sumar cantidad
@@ -52,7 +22,7 @@ function Carrito({ volver, irAConfirmacion }) {
     );
   };
 
-  const eliminar = (id) => { // // para quitar de carrito
+  const eliminar = (id) => { // para quitar de carrito
     setCarrito(carrito.filter(item => item.id !== id));
   };
 
@@ -60,39 +30,49 @@ function Carrito({ volver, irAConfirmacion }) {
 
    const handleGuardarPedido = async () => {
     setEnviando(true);
-    const fechaPedido = new Date().toISOString();
+    const idProfile = localStorage.getItem('idProfile');
+    const ids = carrito.flatMap(item => Array(item.cantidad).fill(item.id));
+    try {
+      const res = await createOrder(idProfile, ids, total, infoTienda.id);
+      const orderId = res.data.id;
 
-    const pedido = {
-      tienda: infoTienda,
-      items: carrito,
-      total,
-      fecha: fechaPedido,
-    };
-    /* la IA me dijo q hacia seria la conexion al backend despues, yo ni idea xd, supongo falta sacar la info de los platos tambien idk
-    await fetch("http://localhost:3001/pedidos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(pedido)
-    });
-    */
+      const profileRes = await getProfile(idProfile);
+      const orders = profileRes.data.orders || [];
 
-    setTimeout(() => {
+      await updateProfile(idProfile, { orders: [...orders, orderId] });
+
       setEnviando(false);
       setCarrito([]);
+      setIdTiendaACalificar(infoTienda.id); // <--- Aquí
+      setIdOrdenACalificar(orderId); 
       irAConfirmacion();
-    }, 1000);
+    } catch (e) {
+      setEnviando(false);
+      alert('Error al guardar el pedido');
+    }
+
   };
 
   return (
     <div className="carrito-container">
       <h2>Carrito</h2>
-      <div className="carrito-tienda-info">
-        <img src={infoTienda.logo} alt="logo tienda" className="carrito-tienda-logo" />
-        <div className="carrito-tienda-datos">
-          <div className="carrito-tienda-nombre">{infoTienda.nombre}</div>
-          <div className="carrito-tienda-calificacion">Calificación: {infoTienda.calificacion} ⭐</div>
+      {carrito.length === 0 ? (
+        <div className="carrito-tienda-info">
+          <div className="carrito-tienda-datos">
+            <div className="carrito-tienda-nombre">Carrito vacío</div>
+          </div>
         </div>
-      </div>
+      ) : (
+        infoTienda && (
+          <div className="carrito-tienda-info">
+            <img src={logoTienda} alt="logo tienda" className="carrito-tienda-logo" />
+            <div className="carrito-tienda-datos">
+              <div className="carrito-tienda-nombre">{infoTienda.name}</div>
+              <div className="carrito-tienda-calificacion">Calificación: {infoTienda.average_rating} ⭐</div>
+            </div>
+          </div>
+        )
+      )}
       {carrito.length === 0 ? (
         <p>El carrito está vacío.</p>
       ) : (

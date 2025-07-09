@@ -25,21 +25,30 @@ function App() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrorLogin('');
         try {
             const res = await loginAccount(email, password);
             localStorage.setItem('idProfile', res.data);
             const p = localStorage.getItem('idProfile');
-            console.log('Login en el perfil:', p);
+            console.log('Login en el perfil:', res.data);
             cambiarPantalla("Principal");
         } catch (e) {
-            console.error('Error al registrar:', e.response?.data || e.message);
+            if (e.response && e.response.data && e.response.data.error){
+                setErrorLogin(e.response.data.error);
+                console.error('Error al registrar:', e.response?.data || e.message);
+            } else{
+                console.error('Error al registrar:', e.response?.data || e.message);
+            }
         }
     };
 
     return (
         <div className="App">
             {pantallaActual === "PedidosDemo" ? (
-                <PedidosDemo volverAlInicio={() => setPantallaActual("original")} />
+                <PedidosDemo
+                volverAPrincipal={() => setPantallaActual("Principal")}
+                volverALogin={() => setPantallaActual("inicio")}
+                />
             ) : (
             <header className="Contenedor">
                 {pantallaActual === "inicio" ? (
@@ -96,7 +105,7 @@ function App() {
                                 </button>
                                 {errorLogin && (
                                     <p style={{ color: 'red', marginTop: '10px' }}>
-                                        Credenciales incorrectas.
+                                        {errorLogin}
                                     </p>
                                 )}
                             </div>

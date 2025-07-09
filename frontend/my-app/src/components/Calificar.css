@@ -33,7 +33,7 @@
 }
 
 .calificar-btn-enviar {
-  background: #1976d2;
+  background: #605F66;
   color: white;
   padding: 10px 30px;
   border: none;
@@ -43,7 +43,7 @@
 }
 
 .calificar-btn-enviar:disabled {
-  background: #90caf9;
+  background: #c7c7c7;
   cursor: not-allowed;
 }
 
@@ -57,6 +57,6 @@
 }
 
 .calificar-mensaje-exito {
-  color: green;
+  color: #605F66;
   margin-top: 16px;
 }

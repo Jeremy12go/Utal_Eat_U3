@@ -6,8 +6,17 @@ const StoreController = require('../controllers/StoreController');
 const Product = require('../models/Product');
 const ProductController = require('../controllers/ProductController');
 
-router.get('/:city', StoreController.getByCity);
+// endpoints para Product.
+router.get('/product/id/:id', ProductController.getById);
+router.get('/product/store/:idStore', ProductController.getByIdStore);
+router.get('/product/:id/image', ProductController.getImage);
+router.put('/product/:id', ProductController.update);
+router.delete('/product/:id', ProductController.remove);
+
+router.get('/city/:city', StoreController.getByCity);
 router.get('/:id/logo', StoreController.getLogo);
+router.get('/:id', StoreController.getById);
+router.post('/:id/addrating', StoreController.addRating);
 router.put('/:id', StoreController.update);
 router.delete('/:id', StoreController.remove);
 
@@ -35,12 +44,6 @@ router.post('/', uploadStore.single('logo'), async (req, res) => {
     res.status(500).json({ error: 'Error al guardar la tienda', detalle: e.message });
   }
 });
-
-// endpoints para Product.
-router.get('/product/:idStore', ProductController.getByIdStore);
-router.get('/product/:id/image', ProductController.getImage);
-router.put('/product/:id', ProductController.update);
-router.delete('/product/:id', ProductController.remove);
 
 const storageProduct = multer.memoryStorage();
 const uploadProduct = multer({ storageProduct });

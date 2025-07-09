@@ -27,21 +27,21 @@ exports.getByIdStore = async (req, res) => {
 
 //Cambios aqui
 exports.create = async (req, res) => {
-  try{
-    const { id, idStore, idOrder, idProfile, stars, comment } = req.body;
-
-    const rating = await Rating.create({
-      id,
-      idStore,
-      idOrder,
-      idProfile,
-      stars,
-      comment
-    });
-
-    res.status(201).json({ message: 'Rating creado exitosmente', rating });
-  } catch (e) {
-    res.status(500).json({ error: 'Error al crear rating', detalle: e.message });
+  try {
+    const numRating = await Rating.countDocuments();
+    const { idStore, idOrder, idProfile, stars, comment } = req.body;
+    const newRating = await Rating.create({
+            id: `rating${numRating + 1}`, 
+            idStore,
+            idOrder, 
+            idProfile,
+            stars,
+            comment,
+          });
+    //const newRating = await Rating.create(req.body);
+    res.status(201).json(newRating);
+  } catch(e) {
+    res.status(400).json({error: 'Datos inválidos', detalle: e.message });
   }
 };
 

@@ -14,6 +14,16 @@ exports.getByCity = async (req, res) => {
   }
 };
 
+exports.getById = async (req, res) => {
+  try {
+    const store = await Store.findOne({ id: req.params.id });
+    if (!store) return res.status(404).json({ error: 'Tienda no encontrada' });
+    res.json(store);
+  } catch (e) {
+    res.status(500).json({ error: 'Error al obtener la tienda', detalle: e.message });
+  }
+};
+
 exports.getLogo = async (req, res) => {
   try {
     const store = await Store.findOne({ id: req.params.id });
@@ -43,6 +53,20 @@ exports.update = async (req, res) => {
     res.json(store);
   } catch(e) {
     res.status(400).json({ error: 'Error al actualizar', detalle: e.message });
+  }
+};
+
+exports.addRating = async (req, res) => {
+  try {
+    const store = await Store.findOneAndUpdate(
+      { id: req.params.id },
+      { $push: { ratings: req.body.ratingId } },
+      { new: true }
+    );
+    if (!store) return res.status(404).json({ error: 'Tienda no encontrada' });
+    res.json(store);
+  } catch (e) {
+    res.status(400).json({ error: 'Error al agregar rating', detalle: e.message });
   }
 };
 

@@ -9,7 +9,9 @@ function ContenedorItems({ item, onClick }) {
             <div className="item-info">
                 <h4 className="item-nombre">{item.name}</h4>
                 {item.category && <p className="item-especialidad">Especialidad: {item.category}</p>}
-                {item.rating && <p className="item-rating">Rating: {item.rating}</p>}
+                {item.average_rating !== undefined && (
+                    <p className="item-rating">Rating: {item.average_rating} ⭐</p>
+                )}
             </div>
         </div>
     );

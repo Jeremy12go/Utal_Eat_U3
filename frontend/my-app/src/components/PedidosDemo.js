@@ -7,14 +7,17 @@ import Pedido from "./Pedido";
 
 //ESTO ES SOLO PARA TESTEAR FUNCIONES ANTES DE TENER EL RESTO DE APP (ELIMINAR DESPUES)
 
-function PedidosDemo({volverAlInicio}) {
+function PedidosDemo({volverAPrincipal, volverALogin}) {
   const [pantalla, setPantalla] = useState("");
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
 
   return (
     <div style={{ textAlign: "center", marginTop: "40px" }}>
-      <button onClick={volverAlInicio} style={{ position: "absolute", left: 20, top: 20 }}>
-        Volver al inicio
+      <button onClick={volverAPrincipal} style={{ position: "absolute", left: 20, top: 20 }}>
+        Ir a Principal
+      </button>
+      <button onClick={volverALogin} style={{ position: "absolute", left: 130, top: 20 }}>
+        Ir a Login
       </button>
       {!pantalla && (
         <>
