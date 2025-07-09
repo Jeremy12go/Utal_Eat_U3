@@ -8,6 +8,9 @@ import { getRatingsByStore } from '../API/APIGateway.js';
 
 import Carrito from "../components/Carrito";
 import Historial from "../components/Historial";
+import Realizado from "../components/Realizado";
+import Calificar from "../components/Calificar";
+import Pedido from "../components/Pedido";
 
 import carritoImg from '../assets/carrito.png';
 import historialImg from '../assets/historial.png';
@@ -22,14 +25,12 @@ function arrayBufferToBase64(buffer) {
   );
 }
 
-
-
 function Principal({ cambiarPantalla }) {
 
     const [carrito, setCarrito] = useState([]);
     const [ stores, setStores ] = useState([]);
     const [pantalla, setPantalla] = useState("principal");
-    const [foods, setFoods] = useState([])
+    const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
 
     function calcularAverageRating(ratings) {
         if (!Array.isArray(ratings) || ratings.length === 0) return "N/A";
@@ -79,16 +80,18 @@ function Principal({ cambiarPantalla }) {
 
         StoresByCity();
     },[]);
-    
-    const todasLasComidas = foods;
 
     const [tiendaSeleccionada, setTiendaSeleccionada] = useState(null);
     const [productosTienda, setProductosTienda] = useState([]);
-    const [comidaSeleccionada, setComidaSeleccionada] = useState(null);
 
     const seleccionarTienda = async (tienda) => {
         setTiendaSeleccionada(tienda);
-        setComidaSeleccionada(null);
+        if (
+            carrito.length > 0 &&
+            carrito[0].idStore !== tienda.id
+        ) {
+            setCarrito([]); // Limpia el carrito
+        }
         try {
             const res = await getProductsByStore(tienda.id);
             console.log("Productos recibidos:", res.data);
@@ -99,15 +102,6 @@ function Principal({ cambiarPantalla }) {
         }
     };
     
-    const seleccionarComida = (comida) => {
-        setComidaSeleccionada(comida);
-        if (!tiendaSeleccionada) {
-            const tienda = stores.find(t => t.comidas.includes(comida));
-            if (tienda) {
-                setTiendaSeleccionada(tienda);
-            }
-        }
-    };
 
     const agregarACarrito = (producto) => {
         setCarrito(prev => {
@@ -147,8 +141,6 @@ function Principal({ cambiarPantalla }) {
         });
     };
 
-    //const comidasAMostrar = tiendaSeleccionada ? tiendaSeleccionada.comidas : todasLasComidas;
-
     if (pantalla === "carrito") {
         let logoTienda = tiendaSeleccionada && tiendaSeleccionada.logo && tiendaSeleccionada.logo.data
             ? `data:${tiendaSeleccionada.logo.contentType};base64,${arrayBufferToBase64(tiendaSeleccionada.logo.data.data)}`
@@ -158,12 +150,26 @@ function Principal({ cambiarPantalla }) {
             carrito={carrito}
             setCarrito={setCarrito}
             volver={() => setPantalla("principal")}
-            irAConfirmacion={() => setPantalla("principal")}
+            irAConfirmacion={() => setPantalla("realizado")}
             logoTienda={logoTienda}
         />;
     }
     if (pantalla === "historial") {
-        return <Historial volver={() => setPantalla("principal")} />;
+        return <Historial
+        volver={() => setPantalla("")}
+        verPedido={pedido => {
+          setPedidoSeleccionado(pedido);
+          setPantalla("detallesPedido");}}
+      />;
+    }
+    if(pantalla === "realizado") {
+        return <Realizado
+        volver={() => setPantalla("principal")}
+        irACalificar={() => setPantalla("calificacion")}
+      />
+    }
+    if(pantalla === "calificacion") {
+        return <Calificar volver={() => setPantalla("principal")} />
     }
 
     return (
@@ -173,7 +179,7 @@ function Principal({ cambiarPantalla }) {
                 <button className="logo-box">Utal Eats</button>
                 <button className="menu-boton" onClick={() => setPantalla("carrito")}> 
                     <div style={{ position: "relative", display: "inline-block" }}>
-                        <img src={carritoImg} alt="Carrito" className="icons" />
+                        <img src={carritoImg} alt="Carrito" className="icons" /> 
                         {carrito.length > 0 && (
                             <span
                                 style={{

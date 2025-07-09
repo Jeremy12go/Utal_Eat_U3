@@ -15,12 +15,13 @@ exports.getByIdProfile = async (req, res) => {
 exports.create = async (req, res) => {
    try {
       const numOrder = await Order.countDocuments();
-      const { idProfile } = req.body;
+      const { idProfile, productList } = req.body;
 
       const order = await Order.create({
-        id: `order${numOrder + 1}`,  
-        state: 'Vigente',
+        id: `order${numOrder + 1}`, 
+        productList, 
         idProfile,
+        orderDate: new Date().toISOString(), //eliminado state: vigente y agregado fecha -nelson
       });
       res.status(201).json(order);
     } catch(e) {

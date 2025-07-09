@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Carrito.css";
+import { createOrder } from '../API/APIGateway.js';
 
 
 function Carrito({ infoTienda, carrito, setCarrito, volver, irAConfirmacion, logoTienda }) {
@@ -21,7 +22,7 @@ function Carrito({ infoTienda, carrito, setCarrito, volver, irAConfirmacion, log
     );
   };
 
-  const eliminar = (id) => { // // para quitar de carrito
+  const eliminar = (id) => { // para quitar de carrito
     setCarrito(carrito.filter(item => item.id !== id));
   };
 
@@ -30,19 +31,17 @@ function Carrito({ infoTienda, carrito, setCarrito, volver, irAConfirmacion, log
    const handleGuardarPedido = async () => {
     setEnviando(true);
     const idProfile = localStorage.getItem('idProfile');
-    const fechaPedido = new Date().toISOString();
-
-    const pedido = {
-      tienda: infoTienda,
-      items: carrito,
-      total: total,
-      fecha: fechaPedido,
-    };
-    setTimeout(() => {
+    const ids = carrito.flatMap(item => Array(item.cantidad).fill(item.id));
+    try {
+      const res = await createOrder(idProfile, ids);
       setEnviando(false);
       setCarrito([]);
       irAConfirmacion();
-    }, 1000);
+    } catch (e) {
+      setEnviando(false);
+      alert('Error al guardar el pedido');
+    }
+
   };
 
   return (

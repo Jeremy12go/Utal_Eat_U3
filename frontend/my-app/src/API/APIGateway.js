@@ -13,7 +13,7 @@ export const getProfile = (idProfile) => axios.get(`${API_URL}/accounts/profile/
 // Service-Order
 export const ordersByProfile = (idProfile) => axios.get(`${API_URL}/orders/${idProfile}`);
 
-export const createOrder = (idProfile) => axios.post(`${API_URL}/orders`);
+export const createOrder = (idProfile, productList) => axios.post(`${API_URL}/orders`, { idProfile, productList }); //se entrega product list de id de productos -nelson
 
 export const changeStateOrder = (id, state) => axios.put(`${API_URL}/orders/${id}`, state);
 

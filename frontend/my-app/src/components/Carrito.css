@@ -97,4 +97,10 @@
   padding: 8px 20px;
   border: none;
   border-radius: 4px;
+  cursor: pointer;
+}
+
+.carrito-btn-realizar:disabled {
+  background: #c7c7c7;
+  cursor: not-allowed;
 }
