@@ -27,7 +27,17 @@ exports.getByIdStore = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    const newRating = await Rating.create(req.body);
+    const numRating = await Rating.countDocuments();
+    const { idStore, idOrder, idProfile, stars, comment } = req.body;
+    const newRating = await Rating.create({
+            id: `rating${numRating + 1}`, 
+            idStore,
+            idOrder, 
+            idProfile,
+            stars,
+            comment,
+          });
+    //const newRating = await Rating.create(req.body);
     res.status(201).json(newRating);
   } catch(e) {
     res.status(400).json({error: 'Datos inválidos', detalle: e.message });

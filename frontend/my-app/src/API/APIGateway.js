@@ -24,6 +24,10 @@ export const changeStateOrder = (id, state) => axios.put(`${API_URL}/orders/${id
 export const addProductOrder = (id, product) => axios.put(`${API_URL}/orders/${id}`, product);
 
 // Service-Store
+export const updateStore = (id, data) => axios.put(`${API_URL}/stores/${id}`, data);
+
+export const addRatingToStore = (idStore, ratingId) => axios.post(`${API_URL}/stores/${idStore}/addrating`, { ratingId });
+
 export const storeByCity = (city) => axios.get(`${API_URL}/stores/city/${city}`);
 
 export const getStoreById = (id) => axios.get(`${API_URL}/stores/${id}`);
@@ -39,5 +43,5 @@ export const getImageProduct = (id) => axios.get(`${API_URL}/stores/product/${id
 // Services-Ranking
 export const getRatingsByStore = (id) => axios.get(`${API_URL}/ratings/stores/${id}`);
 
-export const createRating = (idStore, idOrder, numStars, comment) => axios
-    .post(`${API_URL}/ratings`,{ idStore, idOrder, numStars, comment });
+export const createRating = (idStore, idOrder, idProfile, stars, comment) => axios
+    .post(`${API_URL}/ratings`,{ idStore, idOrder, idProfile, stars, comment });

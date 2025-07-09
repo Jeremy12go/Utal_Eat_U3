@@ -56,6 +56,20 @@ exports.update = async (req, res) => {
   }
 };
 
+exports.addRating = async (req, res) => {
+  try {
+    const store = await Store.findOneAndUpdate(
+      { id: req.params.id },
+      { $push: { ratings: req.body.ratingId } },
+      { new: true }
+    );
+    if (!store) return res.status(404).json({ error: 'Tienda no encontrada' });
+    res.json(store);
+  } catch (e) {
+    res.status(400).json({ error: 'Error al agregar rating', detalle: e.message });
+  }
+};
+
 exports.remove = async (req, res) => {
   try {
     const removedStore = await Store.findByIdAndDelete({id: req.params.id});

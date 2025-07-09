@@ -15,8 +15,6 @@ import Pedido from "../components/Pedido";
 
 import carritoImg from '../assets/carrito.png';
 import historialImg from '../assets/historial.png';
-import ajustesImg from '../assets/ajustes.png';
-import logoutImg from '../assets/log-out.png';
 import lupaImg from '../assets/lupa.png';
 import usuarioImg from '../assets/usuario.png';
 
@@ -26,6 +24,8 @@ function Principal({ cambiarPantalla }) {
     const [ stores, setStores ] = useState([]);
     const [pantalla, setPantalla] = useState("principal");
     const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
+    const [idTiendaACalificar, setIdTiendaACalificar] = useState(null);
+    const [idOrdenACalificar, setIdOrdenACalificar] = useState(null);   
 
     function calcularAverageRating(ratings) {
         if (!Array.isArray(ratings) || ratings.length === 0) return "N/A";
@@ -137,6 +137,8 @@ function Principal({ cambiarPantalla }) {
             volver={() => setPantalla("principal")}
             irAConfirmacion={() => setPantalla("realizado")}
             logoTienda={logoTienda}
+            setIdTiendaACalificar={setIdTiendaACalificar}
+            setIdOrdenACalificar={setIdOrdenACalificar}
         />;
     }
     if (pantalla === "historial") {
@@ -153,8 +155,13 @@ function Principal({ cambiarPantalla }) {
         irACalificar={() => setPantalla("calificacion")}
       />
     }
-    if(pantalla === "calificacion") {
-        return <Calificar volver={() => setPantalla("principal")} />
+    if (pantalla === "calificacion") {
+        return <Calificar
+            volver={() => setPantalla("principal")}
+            idStore={idTiendaACalificar}
+            idOrder={idOrdenACalificar}
+            idProfile={perfil?.id}
+        />
     }
     if(pantalla === "detallesPedido" && pedidoSeleccionado) {
         return <Pedido 

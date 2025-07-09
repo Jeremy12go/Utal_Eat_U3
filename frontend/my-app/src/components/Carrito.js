@@ -3,7 +3,7 @@ import "./Carrito.css";
 import { createOrder, getProfile, updateProfile } from '../API/APIGateway.js';
 
 
-function Carrito({ infoTienda, carrito, setCarrito, volver, irAConfirmacion, logoTienda }) {
+function Carrito({ infoTienda, carrito, setCarrito, volver, irAConfirmacion, logoTienda, setIdTiendaACalificar, setIdOrdenACalificar }) {
   const [enviando, setEnviando] = useState(false);
 
   const sumar = (id) => { // para sumar cantidad
@@ -43,6 +43,8 @@ function Carrito({ infoTienda, carrito, setCarrito, volver, irAConfirmacion, log
 
       setEnviando(false);
       setCarrito([]);
+      setIdTiendaACalificar(infoTienda.id); // <--- Aquí
+      setIdOrdenACalificar(orderId); 
       irAConfirmacion();
     } catch (e) {
       setEnviando(false);

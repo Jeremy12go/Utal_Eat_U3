@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { createRating, addRatingToStore } from "../API/APIGateway";
 import "./Calificar.css";
 
-function Calificar({ volver }) {
+function Calificar({ volver, idStore, idOrder, idProfile }) {
   const [estrellas, setEstrellas] = useState(0);
   const [comentario, setComentario] = useState("");
   const [enviando, setEnviando] = useState(false);
@@ -9,11 +10,15 @@ function Calificar({ volver }) {
 
   const handleEnviar = async () => {
     setEnviando(true);
-
-    setTimeout(() => {
-      setEnviando(false);
+    try {
+      const res = await createRating(idStore, idOrder, idProfile, estrellas, comentario);
+      const ratingID = res.data._id;
+      await addRatingToStore(idStore, ratingID);
       setEnviado(true);
-    }, 1000);
+    } catch (e) {
+      alert("Error al enviar calificación");
+    }
+    setEnviando(false);
   };
 
   return (

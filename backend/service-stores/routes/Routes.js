@@ -16,6 +16,7 @@ router.delete('/product/:id', ProductController.remove);
 router.get('/city/:city', StoreController.getByCity);
 router.get('/:id/logo', StoreController.getLogo);
 router.get('/:id', StoreController.getById);
+router.post('/:id/addrating', StoreController.addRating);
 router.put('/:id', StoreController.update);
 router.delete('/:id', StoreController.remove);
 
