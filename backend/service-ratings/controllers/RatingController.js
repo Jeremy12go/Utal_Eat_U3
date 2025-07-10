@@ -13,7 +13,7 @@ exports.getByIdOrder = async (req, res) => {
   }
 };
 
-exports.getByIdStore = async (req, res) => {
+exports.getRatingsByStoreId = async (req, res) => {
   try {
     const ratings = await Rating.find({ idStore: req.params.idStore });
     if ( ratings === 0) {

@@ -4,7 +4,7 @@ const controller = require('../controllers/RatingController');
 const Rating = require('../models/Rating');
 
 router.get('/:idOrder', controller.getByIdOrder);
-router.get('/stores/:idStore', controller.getByIdStore);
+router.get('/stores/:idStore', controller.getRatingsByStoreId);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.delete('/:id', controller.remove);
@@ -21,6 +21,5 @@ router.get('/stores/:idStore', async (req, res) => {
         res.status(500).json({ message: "Error al buscar ratings", error: err.message });
     }
 });
-router.get('/store/:idStore/detalles', controller.getRatingsByStoreId);
 
 module.exports = router;

@@ -10,7 +10,6 @@ app.use('/stores', StoreRoutes);
 const { mongoConnect } = require('./db/database');
 
 const PORT = process.env.PORT || 3001;
-
 mongoConnect()
   .then(() => {
     app.listen(PORT, () => {

@@ -110,11 +110,6 @@ function App() {
                                 )}
                             </div>
                         </Contenedor>
-                        <div style={{marginTop: '20px'}}>
-                            <button onClick={() => setPantallaActual("PedidosDemo")}>
-                            Ir a TESTS
-                            </button>
-                        </div>
                     </>
                 ) : pantallaActual === "Registro" ? (
                     <Registro cambiarPantalla={cambiarPantalla} />

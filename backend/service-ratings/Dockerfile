@@ -4,4 +4,4 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 EXPOSE 3003
-CMD ["node", "ratings-app.js"]
+CMD ["/bin/sh", "-c", "node db/seed.js || true && node ratings-app.js"]

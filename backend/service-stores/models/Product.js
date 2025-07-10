@@ -9,15 +9,4 @@ const productSchema = new mongoose.Schema({
   description: { type: String, required: true }
 });
 
-/*Método de instancia.
-storeSchema.methods.getResumen = function () {
-  return `${this.nombre} - ${this.categoria}`;
-};
-
-/// Método estático.
-storeSchema.statics.encontrarPorCategoria = function (cat) {
-  return this.find({ categoria: cat });
-};
-*/
-
 module.exports = mongoose.models.Product || mongoose.model('Product', productSchema);
